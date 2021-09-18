@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 
 @Data
 @AllArgsConstructor
@@ -16,4 +17,6 @@ public class Customer extends AbstractBaseEntity{
     private long idNumber;
     private double salary;
     private String phoneNumber;
+    @OneToOne(mappedBy = "customer")
+    CreditScore creditScore;
 }
