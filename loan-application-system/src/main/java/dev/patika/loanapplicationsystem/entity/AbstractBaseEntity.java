@@ -13,6 +13,7 @@ import java.time.Instant;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class AbstractBaseEntity {
+    @Column(nullable = false)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
