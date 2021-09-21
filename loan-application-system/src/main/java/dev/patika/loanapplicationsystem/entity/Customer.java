@@ -1,5 +1,6 @@
 package dev.patika.loanapplicationsystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,7 @@ public class Customer extends AbstractBaseEntity{
     private long idNumber;
     private double salary;
     private String phoneNumber;
+    @JsonIgnore
     @OneToOne(mappedBy = "customer")
     CreditScore creditScore;
 }
