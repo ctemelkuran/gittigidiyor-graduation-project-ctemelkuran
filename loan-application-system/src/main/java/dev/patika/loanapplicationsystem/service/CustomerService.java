@@ -3,6 +3,7 @@ package dev.patika.loanapplicationsystem.service;
 import dev.patika.loanapplicationsystem.dto.CustomerDTO;
 import dev.patika.loanapplicationsystem.entity.Customer;
 import dev.patika.loanapplicationsystem.exceptions.CustomerAlreadyExistsException;
+import dev.patika.loanapplicationsystem.exceptions.CustomerNotFoundException;
 import dev.patika.loanapplicationsystem.exceptions.InvalidIdNumberException;
 import dev.patika.loanapplicationsystem.mapper.CustomerMapper;
 import dev.patika.loanapplicationsystem.repository.CustomerRepository;
@@ -26,24 +27,27 @@ public class CustomerService {
     private final CustomerMapper customerMapper;
 
     @Transactional
-    public Optional<CustomerDTO> saveCustomer(CustomerDTO customerDTO){
+    public Optional<CustomerDTO> saveCustomer(CustomerDTO customerDTO) {
 
+        // Validate input, especially National ID
         this.validateRequest(customerDTO);
+
         boolean isExists = customerRepository.existsByIdNumber(customerDTO.getIdNumber());
 
-        if(isExists){
+        if (isExists) {
             throw new CustomerAlreadyExistsException("Customer with National Id: "
                     + customerDTO.getIdNumber() + " is already exists!");
         }
-  /*      else if (isOdd(customerDTO.getIdNumber())){
-            throw new InvalidIdNumberException(ErrorMessageConstants.ID_NUMBER_IS_ODD);
-        }*/
 
         Customer customer = customerMapper.mapFromCustomerDTOtoCustomer(customerDTO);
+        // set credit score while saving the customer
+        customer.setCreditScore(300);
+
         customerRepository.save(customer);
         return Optional.of(customerMapper.mapFromCustomerToCustomerDTO(customer));
     }
 
+    @Transactional(readOnly = true)
     public Set<CustomerDTO> getAllCustomers() {
 
         return customerRepository.findAll()
@@ -51,32 +55,43 @@ public class CustomerService {
                 .map(customer -> customerMapper.mapFromCustomerToCustomerDTO(customer))
                 .collect(Collectors.toSet());
     }
-/*
+
     @Transactional
-    public Optional<CustomerDTO> updateCustomer(CustomerDTO customerDTO) {
-        Customer selectedCustomer = customerRepository.findById(customerDTO.getId())
-                .orElseThrow(() -> new EntityNotFoundException(
-                        String.format(CUSTOMER_NOT_FOUND, customerDTO.getIdNumber())));
+    public Optional<CustomerDTO> updateCustomer(CustomerDTO customerDTO, long id) {
+        customerRepository.findById(id)
+                .orElseThrow(()-> new CustomerNotFoundException("Customer not found with id: "+ id));
 
-        boolean customerExist = customerRepository.findByCode(request.getCode()).
-                isPresent();
+        this.validateRequest(customerDTO);
 
-        if(customerExist){
-            throw new CustomerAlreadyExistsException(
-                    String.format(COURSE_FOUND, request.getCode()));
-        }
-
-        Customer updatedCustomer = customerRepository.save(selectedCustomer);
-
-        return Optional.of(updatedCustomer);
-    }*/
-
-    public boolean isOdd(long i) {
-        return (i & 1) != 0;
+        Customer customer = customerMapper.mapFromCustomerDTOtoCustomer(customerDTO);
+        customer.setId(id);
+        CustomerDTO updatedCustomerDTO =
+                customerMapper.mapFromCustomerToCustomerDTO(customerRepository.save(customer));
+        return Optional.of(updatedCustomerDTO);
     }
+
 
     private void validateRequest(CustomerDTO customerDTO) {
         CustomerValidatorUtil.validateNationalId(customerDTO.getIdNumber());
+    }
+
+    @Transactional(readOnly = true)
+    public CustomerDTO findById(long id){
+        Customer customer = customerRepository.findById(id).orElseThrow(
+                () -> new CustomerNotFoundException(String.format(CUSTOMER_NOT_FOUND, id)));
+
+        return customerMapper.mapFromCustomerToCustomerDTO(customer);
+    }
+
+
+    @Transactional(readOnly = true)
+    public String deleteById(long id) {
+
+        Customer foundCustomer = customerRepository.findById(id)
+                .orElseThrow(() -> new CustomerNotFoundException(CUSTOMER_NOT_FOUND));
+
+        customerRepository.delete(foundCustomer);
+        return "Customer deleted with id: " + id;
     }
 }
 

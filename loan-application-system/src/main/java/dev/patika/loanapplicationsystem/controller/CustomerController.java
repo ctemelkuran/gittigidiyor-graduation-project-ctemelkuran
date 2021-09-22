@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/api/customer")
+@RequestMapping("/api/customers")
 @RequiredArgsConstructor
 public class CustomerController {
     private final CustomerService customerService;
@@ -35,15 +35,22 @@ public class CustomerController {
     }
 
 
-/*    @PutMapping
-    public ResponseEntity<CustomerDTO> updateCustomer(@RequestBody @Valid CustomerDTO customerDTO){
-        Optional<CustomerDTO> optionalCustomerDTO = customerService.updateCustomer(customerDTO);
+    @PutMapping("{id}")
+    public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable long id, @RequestBody @Valid CustomerDTO customerDTO){
+        Optional<CustomerDTO> optionalCustomerDTO = customerService.updateCustomer(customerDTO, id);
 
         if (!optionalCustomerDTO.isPresent()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(optionalCustomerDTO.get(), HttpStatus.OK);
-    }*/
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> delete(@PathVariable long id){
+        customerService.deleteById(id);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 
 }

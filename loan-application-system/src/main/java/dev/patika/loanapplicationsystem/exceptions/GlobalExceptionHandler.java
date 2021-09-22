@@ -21,6 +21,12 @@ public class GlobalExceptionHandler {
         ErrorResponse response = prepareErrorResponse(HttpStatus.BAD_REQUEST, exc.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler({CustomerNotFoundException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorResponse> handleException(CustomerNotFoundException exc){
+        ErrorResponse response = prepareErrorResponse(HttpStatus.BAD_REQUEST, exc.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 
     private ErrorResponse prepareErrorResponse(HttpStatus httpStatus, String message) {
         ErrorResponse errorResponse = new ErrorResponse();

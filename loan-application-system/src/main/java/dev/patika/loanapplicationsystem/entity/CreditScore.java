@@ -1,6 +1,7 @@
 package dev.patika.loanapplicationsystem.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,8 +12,9 @@ import javax.persistence.OneToOne;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 public class CreditScore extends AbstractBaseEntity{
     private int creditScore;
-    @OneToOne
-    Customer customer;
+    //@OneToOne
+    private int lastDigitOfIdNumber;
 }

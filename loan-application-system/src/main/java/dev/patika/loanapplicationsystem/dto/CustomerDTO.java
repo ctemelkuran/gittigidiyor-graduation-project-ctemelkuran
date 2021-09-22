@@ -22,7 +22,7 @@ public class CustomerDTO {
     @NotBlank(message = "Customer name is mandatory")
     private String fullName;
 
-    @ApiModelProperty(example = "12345678902")
+    @ApiModelProperty(example = "36071499368")
     @NotNull(message = "National ID is mandatory")
     @NumberFormat(style = NumberFormat.Style.NUMBER)
     //@Pattern(regexp = "^\\d{11}$", message = "Enter a valid National ID!")
