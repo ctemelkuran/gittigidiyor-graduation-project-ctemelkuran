@@ -6,6 +6,7 @@ import dev.patika.loanapplicationsystem.exceptions.CustomerAlreadyExistsExceptio
 import dev.patika.loanapplicationsystem.exceptions.CustomerNotFoundException;
 import dev.patika.loanapplicationsystem.exceptions.InvalidIdNumberException;
 import dev.patika.loanapplicationsystem.mapper.CustomerMapper;
+import dev.patika.loanapplicationsystem.repository.CreditScoreRepository;
 import dev.patika.loanapplicationsystem.repository.CustomerRepository;
 import dev.patika.loanapplicationsystem.util.CustomerValidatorUtil;
 import dev.patika.loanapplicationsystem.util.ErrorMessageConstants;
@@ -25,6 +26,7 @@ import static dev.patika.loanapplicationsystem.util.ErrorMessageConstants.CUSTOM
 public class CustomerService {
     private final CustomerRepository customerRepository;
     private final CustomerMapper customerMapper;
+    private final CreditScoreRepository creditScoreRepository;
 
     @Transactional
     public Optional<CustomerDTO> saveCustomer(CustomerDTO customerDTO) {
@@ -40,11 +42,17 @@ public class CustomerService {
         }
 
         Customer customer = customerMapper.mapFromCustomerDTOtoCustomer(customerDTO);
+
         // set credit score while saving the customer
-        customer.setCreditScore(300);
+        customer.setCreditScore(creditScoreAccordingToIdNumber(customer.getIdNumber()));
 
         customerRepository.save(customer);
         return Optional.of(customerMapper.mapFromCustomerToCustomerDTO(customer));
+    }
+
+    private int creditScoreAccordingToIdNumber(long idNumber) {
+        long lastDigit = idNumber % 10;
+        return creditScoreRepository.findCreditScoreByLastDigitOfIdNumber(lastDigit);
     }
 
     @Transactional(readOnly = true)
@@ -63,8 +71,16 @@ public class CustomerService {
 
         this.validateRequest(customerDTO);
 
+        boolean isExists = customerRepository.existsByIdNumber(customerDTO.getIdNumber());
+
+        if (isExists) {
+            throw new CustomerAlreadyExistsException("Customer with National Id: "
+                    + customerDTO.getIdNumber() + " is already exists!");
+        }
+
         Customer customer = customerMapper.mapFromCustomerDTOtoCustomer(customerDTO);
         customer.setId(id);
+        customer.setCreditScore(creditScoreAccordingToIdNumber(customer.getIdNumber()));
         CustomerDTO updatedCustomerDTO =
                 customerMapper.mapFromCustomerToCustomerDTO(customerRepository.save(customer));
         return Optional.of(updatedCustomerDTO);

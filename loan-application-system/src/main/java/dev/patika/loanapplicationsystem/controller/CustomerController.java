@@ -36,7 +36,8 @@ public class CustomerController {
 
 
     @PutMapping("{id}")
-    public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable long id, @RequestBody @Valid CustomerDTO customerDTO){
+    public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable long id,
+                                                      @RequestBody @Valid CustomerDTO customerDTO){
         Optional<CustomerDTO> optionalCustomerDTO = customerService.updateCustomer(customerDTO, id);
 
         if (!optionalCustomerDTO.isPresent()) {
