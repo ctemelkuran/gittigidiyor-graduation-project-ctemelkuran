@@ -1,5 +1,6 @@
 package dev.patika.loanapplicationsystem.service;
 
+import dev.patika.loanapplicationsystem.dto.CustomerDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -8,4 +9,7 @@ import org.springframework.stereotype.Service;
 public class LoanApplicationService {
 
 
+    public String applyToLoan(CustomerDTO customerDTO) {
+        return null;
+    }
 }

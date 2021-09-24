@@ -22,7 +22,8 @@ public class LoanApplicationController {
     @GetMapping
     public ResponseEntity<String> applyToLoan (@RequestBody @Valid CustomerDTO customerDTO) {
 
-        return null;
+
+        return new ResponseEntity<>(loanApplService.applyToLoan(customerDTO), HttpStatus.OK);
     }
 
 }

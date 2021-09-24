@@ -7,5 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CreditScoreRepository extends JpaRepository<CreditScore, Long> {
 
-    int findCreditScoreByLastDigitOfIdNumber(long lastDigit);
+    CreditScore findCreditScoreByLastDigitOfIdNumberEquals(int lastDigit);
+
 }

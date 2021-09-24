@@ -15,6 +15,5 @@ import javax.persistence.OneToOne;
 @Builder
 public class CreditScore extends AbstractBaseEntity{
     private int creditScore;
-    //@OneToOne
-    private long lastDigitOfIdNumber;
+    private int lastDigitOfIdNumber;
 }

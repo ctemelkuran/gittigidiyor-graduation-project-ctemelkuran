@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
     boolean existsByIdNumber(long idNumber);
-    Object findByIdNumber(long idNumber);
 
 }
 

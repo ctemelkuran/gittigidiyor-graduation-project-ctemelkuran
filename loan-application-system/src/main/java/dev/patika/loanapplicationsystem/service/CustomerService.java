@@ -1,21 +1,18 @@
 package dev.patika.loanapplicationsystem.service;
 
 import dev.patika.loanapplicationsystem.dto.CustomerDTO;
+import dev.patika.loanapplicationsystem.entity.CreditScore;
 import dev.patika.loanapplicationsystem.entity.Customer;
 import dev.patika.loanapplicationsystem.exceptions.CustomerAlreadyExistsException;
 import dev.patika.loanapplicationsystem.exceptions.CustomerNotFoundException;
-import dev.patika.loanapplicationsystem.exceptions.InvalidIdNumberException;
 import dev.patika.loanapplicationsystem.mapper.CustomerMapper;
 import dev.patika.loanapplicationsystem.repository.CreditScoreRepository;
 import dev.patika.loanapplicationsystem.repository.CustomerRepository;
 import dev.patika.loanapplicationsystem.util.CustomerValidatorUtil;
-import dev.patika.loanapplicationsystem.util.ErrorMessageConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -44,15 +41,18 @@ public class CustomerService {
         Customer customer = customerMapper.mapFromCustomerDTOtoCustomer(customerDTO);
 
         // set credit score while saving the customer
-        customer.setCreditScore(creditScoreAccordingToIdNumber(customer.getIdNumber()));
+        customer.setCustomerCreditScore(creditScoreAccordingToIdNumber(customer.getIdNumber()));
 
         customerRepository.save(customer);
         return Optional.of(customerMapper.mapFromCustomerToCustomerDTO(customer));
     }
 
     private int creditScoreAccordingToIdNumber(long idNumber) {
-        long lastDigit = idNumber % 10;
-        return creditScoreRepository.findCreditScoreByLastDigitOfIdNumber(lastDigit);
+        long lastDigit = Math.abs(idNumber % 10);
+
+        CreditScore creditScore = creditScoreRepository
+                .findCreditScoreByLastDigitOfIdNumberEquals(Math.toIntExact(lastDigit));
+        return creditScore.getCreditScore();
     }
 
     @Transactional(readOnly = true)
@@ -60,7 +60,7 @@ public class CustomerService {
 
         return customerRepository.findAll()
                 .stream()
-                .map(customer -> customerMapper.mapFromCustomerToCustomerDTO(customer))
+                .map(customerMapper::mapFromCustomerToCustomerDTO)
                 .collect(Collectors.toSet());
     }
 
@@ -80,7 +80,7 @@ public class CustomerService {
 
         Customer customer = customerMapper.mapFromCustomerDTOtoCustomer(customerDTO);
         customer.setId(id);
-        customer.setCreditScore(creditScoreAccordingToIdNumber(customer.getIdNumber()));
+        customer.setCustomerCreditScore(creditScoreAccordingToIdNumber(customer.getIdNumber()));
         CustomerDTO updatedCustomerDTO =
                 customerMapper.mapFromCustomerToCustomerDTO(customerRepository.save(customer));
         return Optional.of(updatedCustomerDTO);
@@ -100,7 +100,7 @@ public class CustomerService {
     }
 
 
-    @Transactional(readOnly = true)
+    @Transactional
     public String deleteById(long id) {
 
         Customer foundCustomer = customerRepository.findById(id)

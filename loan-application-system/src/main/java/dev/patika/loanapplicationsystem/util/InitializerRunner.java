@@ -25,10 +25,10 @@ public class InitializerRunner implements CommandLineRunner {
         customerRepository.deleteAll();
         creditScoreRepository.deleteAll();
 
-        customerRepository.save(Customer.builder().fullName("Ali Veli").idNumber(63743325700L).salary(3000).creditScore(300).phoneNumber("5392582569").build());
-        customerRepository.save(Customer.builder().fullName("Quentin Tarantino").idNumber(82661129498L).salary(4000).creditScore(200).phoneNumber("5312582569").build());
-        customerRepository.save(Customer.builder().fullName("Arthur Dent").idNumber(53436704844L).salary(4000).creditScore(300).phoneNumber("5452582569").build());
-        customerRepository.save(Customer.builder().fullName("Morty Sanchez").idNumber(12174025338L).salary(5000).creditScore(500).phoneNumber("58692 82569").build());
+        customerRepository.save(Customer.builder().fullName("Ali Veli").idNumber(63743325700L).salary(3000).customerCreditScore(300).phoneNumber("5392582569").build());
+        customerRepository.save(Customer.builder().fullName("Quentin Tarantino").idNumber(82661129498L).salary(4000).customerCreditScore(200).phoneNumber("5312582569").build());
+        customerRepository.save(Customer.builder().fullName("Arthur Dent").idNumber(53436704844L).salary(4000).customerCreditScore(300).phoneNumber("5452582569").build());
+        customerRepository.save(Customer.builder().fullName("Morty Sanchez").idNumber(12174025338L).salary(5000).customerCreditScore(500).phoneNumber("5869282569").build());
 
         creditScoreRepository.save(CreditScore.builder().creditScore(550).lastDigitOfIdNumber(2).build());
         creditScoreRepository.save(CreditScore.builder().creditScore(1000).lastDigitOfIdNumber(4).build());

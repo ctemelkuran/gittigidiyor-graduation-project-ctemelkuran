@@ -40,17 +40,17 @@ public class CustomerController {
                                                       @RequestBody @Valid CustomerDTO customerDTO){
         Optional<CustomerDTO> optionalCustomerDTO = customerService.updateCustomer(customerDTO, id);
 
-        if (!optionalCustomerDTO.isPresent()) {
+        if (optionalCustomerDTO.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(optionalCustomerDTO.get(), HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> delete(@PathVariable long id){
-        customerService.deleteById(id);
+    public ResponseEntity<String> delete(@PathVariable long id){
+        String customerDeleted = customerService.deleteById(id);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(customerDeleted, HttpStatus.OK);
     }
 
 

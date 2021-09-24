@@ -34,6 +34,6 @@ public class CustomerDTO {
     private double salary;
 
     @ApiModelProperty(example = "5381234567")
-    @Pattern(regexp ="^(5)[0-9]{9}$", message = "Enter a valid number!")
+    //@Pattern(regexp ="^(5)[0-9]{9}$", message = "Enter a valid number!")
     private String phoneNumber;
 }
