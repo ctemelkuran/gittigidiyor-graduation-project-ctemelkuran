@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoanApplicationResult extends AbstractBaseEntity{
+    private long customerIdNumber;
     private LoanResultMessage resultMessage;
     private double loanAmount;
 }

@@ -1,6 +1,7 @@
 package dev.patika.loanapplicationsystem.controller;
 
 import dev.patika.loanapplicationsystem.dto.CustomerDTO;
+import dev.patika.loanapplicationsystem.entity.LoanApplicationResult;
 import dev.patika.loanapplicationsystem.service.CustomerService;
 import dev.patika.loanapplicationsystem.service.LoanApplicationService;
 import lombok.RequiredArgsConstructor;
@@ -19,11 +20,16 @@ public class LoanApplicationController {
     private final LoanApplicationService loanApplService;
     private final CustomerService customerService;
 
-    @GetMapping
-    public ResponseEntity<String> applyToLoan (@RequestBody @Valid CustomerDTO customerDTO) {
+    @PostMapping("/apply")
+    public ResponseEntity<LoanApplicationResult> applyToLoan (@RequestBody @Valid CustomerDTO customerDTO) {
 
 
         return new ResponseEntity<>(loanApplService.applyToLoan(customerDTO), HttpStatus.OK);
+    }
+
+    @GetMapping("/result")
+    public ResponseEntity<LoanApplicationResult> loanApplicationResult(@PathVariable long idNumber){
+        return null;
     }
 
 }
