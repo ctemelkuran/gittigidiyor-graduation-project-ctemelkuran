@@ -16,19 +16,6 @@ public class LoanApplicationCalculator {
             return LoanResultMessage.DENIED;
         else
             return LoanResultMessage.APPROVED;
-   /*     int creditScore = customer.getCustomerCreditScore();
-        LoanApplicationResult result = null;
-
-        if (creditScore < 500){
-            result.setCustomerIdNumber(customer.getIdNumber());
-            result.setResultMessage(LoanResultMessage.DENIED);
-            result.setLoanAmount(0);
-        }
-        else {
-            result.setResultMessage(LoanResultMessage.APPROVED);
-            result.setLoanAmount(1000);
-        }
-        return result;*/
 
     }
 

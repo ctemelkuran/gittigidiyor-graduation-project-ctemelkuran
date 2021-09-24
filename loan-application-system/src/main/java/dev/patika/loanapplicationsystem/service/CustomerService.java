@@ -10,6 +10,7 @@ import dev.patika.loanapplicationsystem.repository.CreditScoreRepository;
 import dev.patika.loanapplicationsystem.repository.CustomerRepository;
 import dev.patika.loanapplicationsystem.util.CustomerValidatorUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +23,8 @@ import static dev.patika.loanapplicationsystem.util.ErrorMessageConstants.CUSTOM
 @RequiredArgsConstructor
 public class CustomerService {
     private final CustomerRepository customerRepository;
-    private final CustomerMapper customerMapper;
+    @Autowired
+    private CustomerMapper customerMapper;
     private final CreditScoreRepository creditScoreRepository;
 
     @Transactional
@@ -47,7 +49,7 @@ public class CustomerService {
         return Optional.of(customerMapper.mapFromCustomerToCustomerDTO(customer));
     }
 
-    private int creditScoreAccordingToIdNumber(long idNumber) {
+    public int creditScoreAccordingToIdNumber(long idNumber) {
         long lastDigit = Math.abs(idNumber % 10);
 
         CreditScore creditScore = creditScoreRepository

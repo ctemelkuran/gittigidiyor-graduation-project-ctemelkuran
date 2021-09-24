@@ -3,15 +3,20 @@ package dev.patika.loanapplicationsystem.service;
 import dev.patika.loanapplicationsystem.dto.CustomerDTO;
 import dev.patika.loanapplicationsystem.entity.Customer;
 import dev.patika.loanapplicationsystem.entity.LoanApplicationResult;
+import dev.patika.loanapplicationsystem.exceptions.LoanApplicationNotFoundException;
 import dev.patika.loanapplicationsystem.mapper.CustomerMapper;
 import dev.patika.loanapplicationsystem.repository.CustomerRepository;
 import dev.patika.loanapplicationsystem.repository.LoanApplicationResultRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.Set;
 
+import static dev.patika.loanapplicationsystem.util.ErrorMessageConstants.LOAN_APPLICATION_NOT_FOUND;
 import static dev.patika.loanapplicationsystem.util.LoanApplicationCalculator.calculateLoanAmount;
 import static dev.patika.loanapplicationsystem.util.LoanApplicationCalculator.decideLoanResultMessage;
 
@@ -20,10 +25,12 @@ import static dev.patika.loanapplicationsystem.util.LoanApplicationCalculator.de
 @RequiredArgsConstructor
 public class LoanApplicationService {
 
-    private final CustomerService customerService;
+    @Autowired
+    private CustomerService customerService;
     private final CustomerRepository customerRepository;
-    private final CustomerMapper customerMapper;
     private final LoanApplicationResultRepository resultRepository;
+    @Autowired
+    private CustomerMapper customerMapper;
 
     @Transactional
     public LoanApplicationResult applyToLoan(CustomerDTO customerDTO) {
@@ -33,16 +40,16 @@ public class LoanApplicationService {
 
         // if customer not exist with given Id Number save the customer
         if (!isExists){
-            Optional<CustomerDTO> Dto = customerService.saveCustomer(customerDTO);
-            Customer customer = customerMapper.mapFromCustomerDTOtoCustomer(Dto.get());
-            LoanApplicationResult result = resultRepository.save(loanApplicationResult(customer));
-            return result;
+            customerService.saveCustomer(customerDTO);
+
+            return resultRepository.save(loanApplicationResult(
+                    customerRepository.findCustomerByIdNumber(customerDTO.getIdNumber())));
 
         }
         else{
-            Customer customer = customerMapper.mapFromCustomerDTOtoCustomer(customerDTO);
-            LoanApplicationResult result = resultRepository.save(loanApplicationResult(customer));
-            return result;
+
+            return resultRepository.save(loanApplicationResult(
+                    customerRepository.findCustomerByIdNumber(customerDTO.getIdNumber())));
         }
     }
 
@@ -58,5 +65,11 @@ public class LoanApplicationService {
         return result;
     }
 
+    public Set<LoanApplicationResult> getApplicationResult(long idNumber){
+
+        //LoanApplicationResult foundResult =
+                //.orElseThrow(() -> new LoanApplicationNotFoundException(String.format(LOAN_APPLICATION_NOT_FOUND, idNumber)));
+        return resultRepository.findByCustomerIdNumber(idNumber);
+    }
 
 }
