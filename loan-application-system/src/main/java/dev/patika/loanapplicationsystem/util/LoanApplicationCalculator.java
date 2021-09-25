@@ -6,10 +6,16 @@ import dev.patika.loanapplicationsystem.entity.enums.LoanResultMessage;
 
 public class LoanApplicationCalculator {
 
+    // Credit limit factor for calculating loan Amount
     public static final double CREDIT_LIMIT_FACTOR = 4;
 
 
-
+    /**
+     * Decides loan result message
+     *
+     * @param creditScore of the customer
+     * @return a {@link LoanResultMessage} calculated by {@literal creditScore}
+     */
     public static LoanResultMessage decideLoanResultMessage(int creditScore) {
 
         if (creditScore<500)
@@ -19,6 +25,13 @@ public class LoanApplicationCalculator {
 
     }
 
+    /**
+     * Calculates limit loan(credit) amount
+     *
+     * @param creditScore of customer
+     * @param salary of customer
+     * @return loan amount
+     */
     public static double calculateLoanAmount(int creditScore, double salary) {
         if (creditScore < 500)
             return 0;

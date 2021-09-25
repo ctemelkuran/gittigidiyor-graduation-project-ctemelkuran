@@ -32,6 +32,7 @@ public class LoanApplicationService {
     @Autowired
     private CustomerMapper customerMapper;
 
+
     @Transactional
     public LoanApplicationResult applyToLoan(CustomerDTO customerDTO) {
         // check if customer exists
@@ -51,6 +52,7 @@ public class LoanApplicationService {
             return resultRepository.save(loanApplicationResult(
                     customerRepository.findCustomerByIdNumber(customerDTO.getIdNumber())));
         }
+
     }
 
     public LoanApplicationResult loanApplicationResult(Customer customer) {
