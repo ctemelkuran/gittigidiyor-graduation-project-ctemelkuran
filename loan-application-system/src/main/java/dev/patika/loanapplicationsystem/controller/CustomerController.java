@@ -30,7 +30,7 @@ public class CustomerController {
         Optional<CustomerDTO> optionalCustomerDTO = customerService.saveCustomer(customerDTO);
 
         if (optionalCustomerDTO.isPresent()) {
-            return new ResponseEntity<>(optionalCustomerDTO.get(), HttpStatus.OK);
+            return new ResponseEntity<>(optionalCustomerDTO.get(), HttpStatus.CREATED);
         }
 
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

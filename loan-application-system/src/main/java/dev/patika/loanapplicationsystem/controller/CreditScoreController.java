@@ -22,10 +22,11 @@ public class CreditScoreController {
         return new ResponseEntity<>(creditScoreService.gelAllCreditScores(), HttpStatus.OK);
     }
 
-    @PutMapping("/update")
+    @PutMapping
     public ResponseEntity<CreditScore> updateCreditScore(@RequestBody CreditScore creditScore){
         CreditScore updatedCreditScore = creditScoreService.updateCreditScore(creditScore);
 
         return  new ResponseEntity<>(updatedCreditScore, HttpStatus.OK);
     }
+
 }

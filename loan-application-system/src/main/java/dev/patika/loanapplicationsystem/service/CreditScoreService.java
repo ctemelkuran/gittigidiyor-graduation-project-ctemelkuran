@@ -40,7 +40,6 @@ public class CreditScoreService {
             throw new EntityNotFoundException("Credit score not found!");
         }
 
-        return creditScoreRepository.
-                findCreditScoreByLastDigitOfIdNumberEquals(creditScore.getLastDigitOfIdNumber());
+        return creditScoreRepository.save(creditScore);
     }
 }

@@ -4,29 +4,25 @@ import dev.patika.loanapplicationsystem.dto.CustomerDTO;
 import dev.patika.loanapplicationsystem.entity.Customer;
 import dev.patika.loanapplicationsystem.entity.LoanApplicationLogger;
 import dev.patika.loanapplicationsystem.entity.LoanApplicationResult;
-import dev.patika.loanapplicationsystem.exceptions.LoanApplicationNotFoundException;
 import dev.patika.loanapplicationsystem.mapper.CustomerMapper;
 import dev.patika.loanapplicationsystem.repository.CustomerRepository;
 import dev.patika.loanapplicationsystem.repository.LoanApplicationLoggerRepository;
 import dev.patika.loanapplicationsystem.repository.LoanApplicationResultRepository;
 import dev.patika.loanapplicationsystem.util.ClientRequestInfo;
-import dev.patika.loanapplicationsystem.util.CustomerValidatorUtil;
+import dev.patika.loanapplicationsystem.service.validators.CustomerValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
-import static dev.patika.loanapplicationsystem.util.ErrorMessageConstants.LOAN_APPLICATION_NOT_FOUND;
 import static dev.patika.loanapplicationsystem.util.LoanApplicationCalculator.calculateLoanAmount;
 import static dev.patika.loanapplicationsystem.util.LoanApplicationCalculator.decideLoanResultMessage;
 
@@ -103,7 +99,7 @@ public class LoanApplicationService {
 
     public Page<List<LoanApplicationLogger>> getAllTransactionsByDate(String transactionDate, Integer pageNumber, Integer pageSize, Pageable pageable) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
-        CustomerValidatorUtil.validateTransactionDate(transactionDate, formatter);
+        CustomerValidator.validateDate(transactionDate, formatter);
         LocalDate transactionDateResult = LocalDate.parse(transactionDate, formatter);
         if(pageNumber != null && pageSize != null){
             pageable = PageRequest.of(pageNumber, pageSize);

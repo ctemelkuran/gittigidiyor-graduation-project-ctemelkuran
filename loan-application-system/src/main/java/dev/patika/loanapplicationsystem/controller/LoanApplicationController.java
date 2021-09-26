@@ -40,9 +40,9 @@ public class LoanApplicationController {
         return new ResponseEntity<>(applicationResult, HttpStatus.OK);
     }
 
+
     @GetMapping("/result")
     public ResponseEntity<Set<LoanApplicationResult>> loanApplicationResult(@RequestParam long idNumber){
         return new ResponseEntity<>(loanApplService.getApplicationResult(idNumber), HttpStatus.OK);
     }
-
 }
