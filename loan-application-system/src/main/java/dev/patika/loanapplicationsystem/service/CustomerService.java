@@ -3,17 +3,24 @@ package dev.patika.loanapplicationsystem.service;
 import dev.patika.loanapplicationsystem.dto.CustomerDTO;
 import dev.patika.loanapplicationsystem.entity.CreditScore;
 import dev.patika.loanapplicationsystem.entity.Customer;
+import dev.patika.loanapplicationsystem.entity.LoanApplicationLogger;
 import dev.patika.loanapplicationsystem.exceptions.CustomerAlreadyExistsException;
 import dev.patika.loanapplicationsystem.exceptions.CustomerNotFoundException;
 import dev.patika.loanapplicationsystem.mapper.CustomerMapper;
 import dev.patika.loanapplicationsystem.repository.CreditScoreRepository;
 import dev.patika.loanapplicationsystem.repository.CustomerRepository;
+import dev.patika.loanapplicationsystem.repository.LoanApplicationLoggerRepository;
 import dev.patika.loanapplicationsystem.util.CustomerValidatorUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -145,5 +152,7 @@ public class CustomerService {
         customerRepository.delete(foundCustomer);
         return "Customer deleted with id: " + id;
     }
+
+
 }
 

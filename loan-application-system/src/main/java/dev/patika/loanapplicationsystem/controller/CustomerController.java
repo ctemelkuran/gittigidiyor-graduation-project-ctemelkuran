@@ -1,8 +1,14 @@
 package dev.patika.loanapplicationsystem.controller;
 
 import dev.patika.loanapplicationsystem.dto.CustomerDTO;
+import dev.patika.loanapplicationsystem.entity.LoanApplicationLogger;
 import dev.patika.loanapplicationsystem.service.CustomerService;
+import dev.patika.loanapplicationsystem.service.LoanApplicationService;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +23,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class CustomerController {
     private final CustomerService customerService;
+    private final LoanApplicationService loanApplicationService;
 
     @PostMapping
     public ResponseEntity<CustomerDTO> saveCustomer(@RequestBody @Valid CustomerDTO customerDTO) {
@@ -53,5 +60,14 @@ public class CustomerController {
         return new ResponseEntity<>(customerDeleted, HttpStatus.OK);
     }
 
+    @GetMapping("/get-applications-by-date")
+    public ResponseEntity<Page<List<LoanApplicationLogger>>> getAllApplicationsByDate(
+            @ApiParam(value = "Loan application query", example = "24/09/2021", required = true)
+            @RequestParam String transactionDate,
+            @RequestParam(required = false) Integer pageNumber,
+            @RequestParam(required = false) Integer pageSize,
+            @PageableDefault(page = 0, size = 10) Pageable pageable){
+        return new ResponseEntity<>(this.loanApplicationService.getAllTransactionsByDate(transactionDate, pageNumber, pageSize, pageable), HttpStatus.OK);
+    }
 
 }
