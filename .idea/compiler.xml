@@ -14,13 +14,21 @@
         </processorPath>
         <module name="loan-application-system" />
       </profile>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="credit-score-system" />
+      </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="credit-score-system" target="11" />
       <module name="loan-application-system" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="credit-score-system" options="-parameters" />
       <module name="loan-application-system" options="-parameters" />
     </option>
   </component>

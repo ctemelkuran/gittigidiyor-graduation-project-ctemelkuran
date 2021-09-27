@@ -21,7 +21,7 @@ public class InitializerRunner implements CommandLineRunner {
     CreditScoreRepository creditScoreRepository;
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         customerRepository.deleteAll();
         creditScoreRepository.deleteAll();
 
@@ -36,7 +36,7 @@ public class InitializerRunner implements CommandLineRunner {
         creditScoreRepository.save(CreditScore.builder().creditScore(900).lastDigitOfIdNumber(8).build());
         creditScoreRepository.save(CreditScore.builder().creditScore(2000).lastDigitOfIdNumber(0).build());
 
-        customerRepository.findAll().forEach(c -> logger.info("{}", c));
+        // customerRepository.findAll().forEach(c -> logger.info("{}", c));
 
     }
 }

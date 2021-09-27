@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/credit-score-system/credit-score-system.iml" filepath="$PROJECT_DIR$/credit-score-system/credit-score-system.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/gittigidiyor-graduation-project-ctemelkuran.iml" filepath="$PROJECT_DIR$/.idea/gittigidiyor-graduation-project-ctemelkuran.iml" />
       <module fileurl="file://$PROJECT_DIR$/loan-application-system/loan-application-system.iml" filepath="$PROJECT_DIR$/loan-application-system/loan-application-system.iml" />
     </modules>
