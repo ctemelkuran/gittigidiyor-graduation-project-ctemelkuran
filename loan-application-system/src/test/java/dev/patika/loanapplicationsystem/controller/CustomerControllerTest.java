@@ -12,8 +12,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -64,9 +67,12 @@ class CustomerControllerTest {
     @Test
     void getAllCustomers() {
         // given
-        //when(mockCustomerService.getAllCustomers()).thenReturn(Set.of());
-        // TODO: 26/09/2021  
+        when(mockCustomerService.getAllCustomers()).thenReturn(anySet());
         // when
+        ResponseEntity<Set<CustomerDTO>> expected = this.customerController.getAllCustomers();
+
+        assertEquals(HttpStatus.OK, expected.getStatusCode());
+
 
     }
 
@@ -90,11 +96,24 @@ class CustomerControllerTest {
     }
 
     @Test
-    void delete() {
-        // TODO: 26/09/2021  
+    void shouldReturnEqualsWhenGivenAnyLong() {
+        // given
+        String expected = "deleted";
+        when(mockCustomerService.deleteById(anyLong())).thenReturn(expected);
+
+        // when
+        ResponseEntity<String> actual = customerController.delete(anyLong());
+
+        // then
+        assertAll(
+                () -> assertEquals(HttpStatus.OK, actual.getStatusCode()),
+                () -> assertEquals(expected, actual.getBody())
+        );
+
     }
 
     @Test
     void getAllApplicationsByDate() {
+        
     }
 }

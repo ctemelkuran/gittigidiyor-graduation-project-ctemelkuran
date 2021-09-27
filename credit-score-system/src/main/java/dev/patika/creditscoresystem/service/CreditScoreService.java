@@ -1,23 +1,22 @@
-package dev.patika.loanapplicationsystem.service;
+package dev.patika.creditscoresystem.service;
 
-import dev.patika.loanapplicationsystem.dto.CustomerDTO;
-import dev.patika.loanapplicationsystem.entity.CreditScore;
-import dev.patika.loanapplicationsystem.repository.CreditScoreRepository;
+
+import dev.patika.creditscoresystem.entity.CreditScore;
+import dev.patika.creditscoresystem.exceptions.CreditScoreNotFoundException;
+import dev.patika.creditscoresystem.repository.CreditScoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CreditScoreService {
     private final CreditScoreRepository creditScoreRepository;
 
-    // TODO: 27/09/2021 delete the CreditScoreService
     /**
      * Find all credit scores that are saved in the database.
      *
@@ -37,10 +36,20 @@ public class CreditScoreService {
      */
     @Transactional
     public CreditScore updateCreditScore(CreditScore creditScore) {
-        if (!creditScoreRepository.existsById(creditScore.getId())){
-            throw new EntityNotFoundException("Credit score not found!");
+
+        Optional<CreditScore> foundCreditScore = creditScoreRepository.findById(creditScore.getId());
+
+        if (foundCreditScore.isEmpty()){
+            throw new CreditScoreNotFoundException("Credit score not found!");
         }
 
         return creditScoreRepository.save(creditScore);
     }
+
+    @Transactional(readOnly = true)
+    public CreditScore findByLastDigit(int lastDigit) {
+        return creditScoreRepository.findCreditScoreByLastDigitOfIdNumberEquals(lastDigit);
+    }
+
+
 }

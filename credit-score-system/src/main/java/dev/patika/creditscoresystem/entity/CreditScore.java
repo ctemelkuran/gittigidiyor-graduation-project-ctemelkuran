@@ -1,8 +1,6 @@
 package dev.patika.creditscoresystem.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -12,7 +10,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class CreditScore {
     @Id
-    private int creditScore;
+    private String id;
     private int lastDigitOfIdNumber;
+    private int creditScore;
 
+    public CreditScore(int lastDigitOfIdNumber, int creditScore) {
+        this.lastDigitOfIdNumber = lastDigitOfIdNumber;
+        this.creditScore = creditScore;
+    }
 }

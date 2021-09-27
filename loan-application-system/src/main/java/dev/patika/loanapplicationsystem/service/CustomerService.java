@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -26,6 +27,10 @@ public class CustomerService {
     @Autowired
     private CustomerMapper customerMapper;
     private final CreditScoreRepository creditScoreRepository;
+    @Autowired
+    RestTemplate restTemplate;
+
+    static final String CREDIT_SCORE_ENDPOINT = "http://localhost:8090/api/credit-scores/";
 
     /**
      * Creates a new customer and saves to database
@@ -47,12 +52,27 @@ public class CustomerService {
         }
 
         Customer customer = customerMapper.mapFromCustomerDTOtoCustomer(customerDTO);
+        // set credit score
+        customer.setCustomerCreditScore(getCreditScore(customer.getIdNumber()));
 
-        // set credit score while saving the customer
-        customer.setCustomerCreditScore(creditScoreAccordingToIdNumber(customer.getIdNumber()));
 
         customerRepository.save(customer);
         return Optional.of(customerMapper.mapFromCustomerToCustomerDTO(customer));
+    }
+
+    /**
+     * Gets the credit score value from credit-score-system
+     *
+     * @param customerIdNumber
+     * @return
+     */
+    private int getCreditScore(Long customerIdNumber) {
+        long lastDigit = customerIdNumber%10;
+        // get credit score from another service
+        CreditScore creditScore = restTemplate.getForObject(CREDIT_SCORE_ENDPOINT+lastDigit, CreditScore.class);
+        int creditScoreValue = creditScore.getCreditScore();
+
+        return creditScoreValue;
     }
 
     /**
@@ -96,6 +116,8 @@ public class CustomerService {
         customerRepository.findById(id)
                 .orElseThrow(()-> new CustomerNotFoundException("Customer not found with id: "+ id));
 
+
+        // Validate Customer input such as National Id Number
         this.validateRequest(customerDTO);
 
         boolean isExists = customerRepository.existsByIdNumber(customerDTO.getIdNumber());
@@ -106,9 +128,10 @@ public class CustomerService {
 
         Customer customer = customerMapper.mapFromCustomerDTOtoCustomer(customerDTO);
         customer.setId(id);
-        customer.setCustomerCreditScore(creditScoreAccordingToIdNumber(customer.getIdNumber()));
+        customer.setCustomerCreditScore(getCreditScore(customer.getIdNumber()));
         CustomerDTO updatedCustomerDTO =
                 customerMapper.mapFromCustomerToCustomerDTO(customerRepository.save(customer));
+
         return Optional.of(updatedCustomerDTO);
     }
 

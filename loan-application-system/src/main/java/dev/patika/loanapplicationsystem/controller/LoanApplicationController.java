@@ -1,6 +1,8 @@
 package dev.patika.loanapplicationsystem.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.patika.loanapplicationsystem.dto.CustomerDTO;
+import dev.patika.loanapplicationsystem.entity.CreditScore;
 import dev.patika.loanapplicationsystem.entity.LoanApplicationResult;
 import dev.patika.loanapplicationsystem.service.CustomerService;
 import dev.patika.loanapplicationsystem.service.LoanApplicationService;
@@ -27,11 +29,14 @@ public class LoanApplicationController {
     RestTemplate restTemplate;
 
     static final String SMS_SENDER_API = "http://sms-sender-service/api";
+    static final String CREDIT_SCORE_ENDPOINT = "http://localhost:8090/api/credit-scores/";
+
 
     @PostMapping("/apply")
     public ResponseEntity<LoanApplicationResult> applyToLoan (@RequestBody @Valid CustomerDTO customerDTO) {
 
-        String phoneNumber = customerDTO.getPhoneNumber();
+        //TODO String phoneNumber = customerDTO.getPhoneNumber();
+
 
         LoanApplicationResult applicationResult = loanApplService.applyToLoan(customerDTO);
 
@@ -45,4 +50,11 @@ public class LoanApplicationController {
     public ResponseEntity<Set<LoanApplicationResult>> loanApplicationResult(@RequestParam long idNumber){
         return new ResponseEntity<>(loanApplService.getApplicationResult(idNumber), HttpStatus.OK);
     }
+
+    @GetMapping("/get-credit-score/{lastDigit}")
+    public CreditScore getCreditScore (@PathVariable int lastDigit){
+        CreditScore creditScore = restTemplate.getForObject(CREDIT_SCORE_ENDPOINT+lastDigit, CreditScore.class);
+        return creditScore;
+    }
+
 }
