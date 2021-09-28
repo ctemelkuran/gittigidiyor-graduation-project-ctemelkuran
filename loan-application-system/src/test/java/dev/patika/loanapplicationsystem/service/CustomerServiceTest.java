@@ -5,6 +5,7 @@ import dev.patika.loanapplicationsystem.entity.Customer;
 import dev.patika.loanapplicationsystem.exceptions.CustomerNotFoundException;
 import dev.patika.loanapplicationsystem.mapper.CustomerMapper;
 import dev.patika.loanapplicationsystem.repository.CustomerRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,20 +28,26 @@ class CustomerServiceTest {
     @Mock
     CustomerMapper mockCustomerMapper;
 
-
     @InjectMocks
     CustomerService customerService;
 
+    Customer customerTest;
+    CustomerDTO customerDTOTest;
+
+    @BeforeEach
+    void setup() {
+        this.customerTest = new Customer();
+        this.customerDTOTest = new CustomerDTO();
+    }
+
     @Test
-    void saveCustomer() {
+    void saveCustomer() { // TODO Customer service tests "why mapper returns null"
         // given
         CustomerDTO customerDTO = new CustomerDTO();
         customerDTO.setIdNumber(52362256090L);
-        Customer customer = new Customer();
-        //customer.setIdNumber(52362256090L);
         when(mockCustomerRepository.existsByIdNumber(anyLong())).thenReturn(Boolean.FALSE);
-        when(mockCustomerMapper.mapFromCustomerDTOtoCustomer(any())).thenReturn(customer);
-        when(mockCustomerRepository.save(any())).thenReturn(customer);
+        when(mockCustomerMapper.mapFromCustomerDTOtoCustomer(any())).thenReturn(customerTest);
+        when(mockCustomerRepository.save(any())).thenReturn(customerTest);
         // when
         CustomerDTO actual = this.customerService.saveCustomer(customerDTO).get();
 
