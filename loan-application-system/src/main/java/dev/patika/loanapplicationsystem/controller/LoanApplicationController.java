@@ -24,23 +24,15 @@ public class LoanApplicationController {
 
     private final LoanApplicationService loanApplService;
     @Autowired
-    private CustomerService customerService;
-    @Autowired
     RestTemplate restTemplate;
 
-    static final String SMS_SENDER_API = "http://sms-sender-service/api";
     static final String CREDIT_SCORE_ENDPOINT = "http://localhost:8090/api/credit-scores/";
 
 
     @PostMapping("/apply")
     public ResponseEntity<LoanApplicationResult> applyToLoan (@RequestBody @Valid CustomerDTO customerDTO) {
 
-        //TODO String phoneNumber = customerDTO.getPhoneNumber();
-
-
         LoanApplicationResult applicationResult = loanApplService.applyToLoan(customerDTO);
-
-        //restTemplate.getForEntity(SMS_SENDER_API + "/"+ phoneNumber + "/"+applicationResult, String.class);
 
         return new ResponseEntity<>(applicationResult, HttpStatus.OK);
     }
@@ -52,9 +44,9 @@ public class LoanApplicationController {
     }
 
     @GetMapping("/get-credit-score/{lastDigit}")
-    public CreditScore getCreditScore (@PathVariable int lastDigit){
+    public ResponseEntity<CreditScore> getCreditScore (@PathVariable int lastDigit){
         CreditScore creditScore = restTemplate.getForObject(CREDIT_SCORE_ENDPOINT+lastDigit, CreditScore.class);
-        return creditScore;
+        return new ResponseEntity<>(creditScore, HttpStatus.OK);
     }
 
 }

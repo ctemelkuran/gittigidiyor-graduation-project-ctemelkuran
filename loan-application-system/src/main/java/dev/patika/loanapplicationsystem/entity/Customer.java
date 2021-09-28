@@ -23,4 +23,6 @@ public class Customer extends AbstractBaseEntity{
 /*    @JsonIgnore
     @OneToOne(mappedBy = "customer")*/
     private int customerCreditScore;
+
+
 }

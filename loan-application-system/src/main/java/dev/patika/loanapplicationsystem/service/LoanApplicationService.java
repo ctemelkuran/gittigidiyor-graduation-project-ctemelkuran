@@ -1,9 +1,12 @@
 package dev.patika.loanapplicationsystem.service;
 
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import dev.patika.loanapplicationsystem.dto.CustomerDTO;
 import dev.patika.loanapplicationsystem.entity.Customer;
 import dev.patika.loanapplicationsystem.entity.LoanApplicationLogger;
 import dev.patika.loanapplicationsystem.entity.LoanApplicationResult;
+import dev.patika.loanapplicationsystem.entity.SmsRequest;
+import dev.patika.loanapplicationsystem.entity.enums.LoanResultMessage;
 import dev.patika.loanapplicationsystem.mapper.CustomerMapper;
 import dev.patika.loanapplicationsystem.repository.CustomerRepository;
 import dev.patika.loanapplicationsystem.repository.LoanApplicationLoggerRepository;
@@ -39,7 +42,7 @@ public class LoanApplicationService {
     private CustomerMapper customerMapper;
     private final LoanApplicationLoggerRepository loggerRepository;
     private final ClientRequestInfo clientRequestInfo;
-
+    private final TwilioSmsSenderService twilioSmsSenderService;
 
 
     @Transactional
@@ -47,7 +50,7 @@ public class LoanApplicationService {
         // check if customer exists
         boolean isExists = customerRepository.existsByIdNumber(customerDTO.getIdNumber());
 
-        LoanApplicationResult loanApplicationResult = new LoanApplicationResult();
+        LoanApplicationResult loanApplicationResult;
         // if customer not exist with given Id Number save the customer
         if (!isExists){
             customerService.saveCustomer(customerDTO);
@@ -61,6 +64,10 @@ public class LoanApplicationService {
                     customerRepository.findCustomerByIdNumber(customerDTO.getIdNumber())));
         }
         this.saveLoanApplicationToDatabase(loanApplicationResult);
+
+        // sends Sms message to the customer
+        //TODO this.sendSms(createSmsRequest(loanApplicationResult, customerDTO.getPhoneNumber()));
+
         return loanApplicationResult;
 
     }
@@ -105,5 +112,25 @@ public class LoanApplicationService {
             pageable = PageRequest.of(pageNumber, pageSize);
         }
         return this.loggerRepository.findAllTransactionByTransactionDate(transactionDateResult, pageable);
+    }
+
+    public void sendSms(SmsRequest smsRequest){
+        twilioSmsSenderService.sendSms(smsRequest);
+    }
+
+    public SmsRequest createSmsRequest(LoanApplicationResult loanApplicationResult, String phoneNumber){
+        StringBuilder message = new StringBuilder("Dear customer with National ID: "
+                + loanApplicationResult.getCustomerIdNumber()+ " your loan application has been "
+                + loanApplicationResult.getResultMessage().toString().toLowerCase()+". ");
+
+        if (loanApplicationResult.getResultMessage().equals(LoanResultMessage.APPROVED)){
+            message.append("Your credit limit is "
+                    + loanApplicationResult.getLoanAmount()
+                    + " TRY. ");
+        }
+        message.append("Thank you for choosing our bank. Have great day!");
+
+        return new SmsRequest(phoneNumber, message.toString());
+
     }
 }

@@ -14,7 +14,7 @@ public abstract class CustomerMapper {
     @Autowired
     protected CustomerService customerService;
 
-    @Mapping(target = "customerCreditScore", expression = "java(customerService.creditScoreAccordingToIdNumber(dto.getIdNumber()))")
+    @Mapping(target = "customerCreditScore", expression = "java(customerService.getCreditScore(dto.getIdNumber()))")
     public abstract Customer mapFromCustomerDTOtoCustomer(CustomerDTO dto);
     public abstract CustomerDTO mapFromCustomerToCustomerDTO(Customer customer);
 }

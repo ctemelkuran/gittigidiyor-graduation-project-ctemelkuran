@@ -25,7 +25,6 @@ public class CustomerDTO {
     @ApiModelProperty(example = "36071499368")
     @NotNull(message = "National ID is mandatory")
     @NumberFormat(style = NumberFormat.Style.NUMBER)
-    //@Pattern(regexp = "^\\d{11}$", message = "Enter a valid National ID!")
     private long idNumber;
 
     @ApiModelProperty(example = "3000")
@@ -33,7 +32,7 @@ public class CustomerDTO {
     @NumberFormat(style = NumberFormat.Style.NUMBER)
     private double salary;
 
-    @ApiModelProperty(example = "5381234567")
-    //@Pattern(regexp ="^(5)[0-9]{9}$", message = "Enter a valid number!")
+    @ApiModelProperty(example = "05381234567")
+    @NotBlank(message = "Phone number is mandatory")
     private String phoneNumber;
 }

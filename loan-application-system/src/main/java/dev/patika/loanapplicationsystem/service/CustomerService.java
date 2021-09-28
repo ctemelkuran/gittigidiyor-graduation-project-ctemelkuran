@@ -6,7 +6,6 @@ import dev.patika.loanapplicationsystem.entity.Customer;
 import dev.patika.loanapplicationsystem.exceptions.CustomerAlreadyExistsException;
 import dev.patika.loanapplicationsystem.exceptions.CustomerNotFoundException;
 import dev.patika.loanapplicationsystem.mapper.CustomerMapper;
-import dev.patika.loanapplicationsystem.repository.CreditScoreRepository;
 import dev.patika.loanapplicationsystem.repository.CustomerRepository;
 import dev.patika.loanapplicationsystem.service.validators.CustomerValidator;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -26,7 +26,6 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
     @Autowired
     private CustomerMapper customerMapper;
-    private final CreditScoreRepository creditScoreRepository;
     @Autowired
     RestTemplate restTemplate;
 
@@ -44,6 +43,7 @@ public class CustomerService {
         // Validate input, especially National ID
         this.validateRequest(customerDTO);
 
+        // Check if the customer already exists
         boolean isExists = customerRepository.existsByIdNumber(customerDTO.getIdNumber());
 
         if (isExists) {
@@ -51,10 +51,11 @@ public class CustomerService {
                     + customerDTO.getIdNumber() + " is already exists!");
         }
 
+        // Credit Score got set with mapper
         Customer customer = customerMapper.mapFromCustomerDTOtoCustomer(customerDTO);
-        // set credit score
-        customer.setCustomerCreditScore(getCreditScore(customer.getIdNumber()));
 
+        // set credit score
+        // customer.setCustomerCreditScore(getCreditScore(customer.getIdNumber()));
 
         customerRepository.save(customer);
         return Optional.of(customerMapper.mapFromCustomerToCustomerDTO(customer));
@@ -66,29 +67,18 @@ public class CustomerService {
      * @param customerIdNumber
      * @return
      */
-    private int getCreditScore(Long customerIdNumber) {
+    public int getCreditScore(Long customerIdNumber) {
         long lastDigit = customerIdNumber%10;
         // get credit score from another service
         CreditScore creditScore = restTemplate.getForObject(CREDIT_SCORE_ENDPOINT+lastDigit, CreditScore.class);
-        int creditScoreValue = creditScore.getCreditScore();
 
-        return creditScoreValue;
+        if (creditScore != null) {
+            return creditScore.getCreditScore();
+        }
+        else
+            throw new NullPointerException("Credit Score is null");
     }
 
-    /**
-     * Determines the credit score of the customer
-     * according to last digit of the National Id Number.
-     *
-     * @param idNumber the unique National ID number of customer is required
-     * @return credit score of the customer int integer type
-     */
-    public int creditScoreAccordingToIdNumber(long idNumber) {
-        long lastDigit = Math.abs(idNumber % 10);
-
-        CreditScore creditScore = creditScoreRepository
-                .findCreditScoreByLastDigitOfIdNumberEquals(Math.toIntExact(lastDigit));
-        return creditScore.getCreditScore();
-    }
 
     /**
      * Find all customer that are saved in the database.
@@ -128,7 +118,7 @@ public class CustomerService {
 
         Customer customer = customerMapper.mapFromCustomerDTOtoCustomer(customerDTO);
         customer.setId(id);
-        customer.setCustomerCreditScore(getCreditScore(customer.getIdNumber()));
+        // customer.setCustomerCreditScore(getCreditScore(customer.getIdNumber()));
         CustomerDTO updatedCustomerDTO =
                 customerMapper.mapFromCustomerToCustomerDTO(customerRepository.save(customer));
 

@@ -13,6 +13,8 @@ public class LoanApplicationSystemApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(LoanApplicationSystemApplication.class, args);
+
+
     }
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
