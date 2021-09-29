@@ -1,27 +1,8 @@
-<!--
-*** Thanks for checking out the Best-README-Template. If you have a suggestion
-*** that would make this better, please fork the repo and create a pull request
-*** or simply open an issue with the tag "enhancement".
-*** Thanks again! Now go create something AMAZING! :D
-***
-***
-***
-*** To avoid retyping too much info. Do a search and replace for the following:
-*** ctemelkuran, gittigidiyor-graduation-project-ctemelkuran, twitter_handle, ctemelkuran@gmail.com, Loan Application System, This project is the graduation project for GittiGidiyor Java Spring Bootcamp.
--->
 
 
 
-<!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
-[![Contributors][contributors-shield]][contributors-url]
-[![Stargazers][stars-shield]][stars-url]
+
+[![MIT License][license-shield]][license-url]
 [![MIT License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
@@ -31,9 +12,9 @@
 <br />
 <p align="center">
   <a href="https://github.com/113-GittiGidiyor-Java-Spring-Bootcamp/gittigidiyor-graduation-project-ctemelkuran">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="images/logo.png" alt="Logo" width="60" >
   </a>
-
+ </p>
 <h3 align="center">Loan Application System</h3>
 
   <p align="center">
@@ -70,7 +51,6 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -83,18 +63,26 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
 
-Here's a blank template to get started:
-**To avoid retyping too much info. Do a search and replace with your text editor for the following:**
-`ctemelkuran`, `gittigidiyor-graduation-project-ctemelkuran`, `twitter_handle`, `ctemelkuran@gmail.com`, `Loan Application System`, `This project is the graduation project for GittiGidiyor Java Spring Bootcamp.`
-
+Loan application system is a demo which customers can apply for credit.
+It is developed as the graduation project for the 
+GittiGidiyor Java Spring BootCamp which is led by our beloved 
+instructor [Koray Güney](https://github.com/korayguney).
 
 ### Built With
 
-* []()
-* []()
-* []()
+* [Spring](https://spring.io/)
+* [H2 Database](https://www.h2database.com/)
+* [MongoDB](https://www.mongodb.com/)
+
+### Sms Service
+
+If the customer applies for loan, a result sms is sent to their phone number.
+<p align="center">
+  <a>
+    <img src="images/screenshot.png" alt="Screenshot" width="80" >
+  </a>
+ </p>
 
 
 
@@ -105,11 +93,10 @@ To get a local copy up and running follow these simple steps.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+
+* [Install JDK 8](https://www.oracle.com/java/technologies/downloads/) or an upper version.
+* [Install Docker Desktop](https://www.docker.com/products/docker-desktop) to create Mongo DB containers.
+
 
 ### Installation
 
@@ -117,81 +104,70 @@ This is an example of how to list things you need to use the software and how to
    ```sh
    git clone https://github.com/113-GittiGidiyor-Java-Spring-Bootcamp/gittigidiyor-graduation-project-ctemelkuran.git
    ```
-2. Install NPM packages
+2. Change directory to `credit-score-system` and run the command below to set up Mongo DB.
    ```sh
-   npm install
+   docker-compose -f docker-compose.yaml up -d
    ```
-
-
+3. Modules can be run by navigating to their directory and executing the following command.
+   ```sh
+   mvnw spring-boot:run
+   ```
+4. After running `credit-score-system` Mongo DB will be running on `http://localhost:8081`
+5. `loan-application-system` app will be running on `http://localhost:8080`
 
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+[Swagger UI](https://swagger.io/tools/swagger-ui/) configurations are made for this application.
+API's visualised interface can be reach from http://localhost:8080/swagger-ui.html 
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+### Documentations for End Points
+**Loan Application**
+* [Apply To Loan](doc/loan-application/apply-to-loan.md)
+* [Show Loan Application Result](doc/loan-application/get-loan-application-result.md)
 
+**Operations on Customers**
+* [Show All Customer](doc/customer/get-all-customers.md)
+* [Save New Customer](doc/customer/save-customer.md)
+* [Update Customer](doc/customer/update-customer.md)
+* [Delete Customer](doc/customer/delete-customer.md)
+
+**Loan Application and Exception Logs**
+* [Show Application Logs By Date](doc/customer/get-application-logs.md)
+* [Show Exception Logs By Date](docs/exception-logs/get-exception-logs-by-date.md)
+* [Show Exception Logs By Type](docs/exception-logs/get-exception-logs-by-type.md)
 
 
 <!-- ROADMAP -->
 ## Roadmap
 
-See the [open issues](https://github.com/113-GittiGidiyor-Java-Spring-Bootcamp/gittigidiyor-graduation-project-ctemelkuran/issues) for a list of proposed features (and known issues).
-
-
-
-<!-- CONTRIBUTING -->
-## Contributing
-
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+A useful front-end could be developed for the project. 
+Also, there must be many security vulnerability that can be reduced.
 
 
 
 <!-- LICENSE -->
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Distributed under the MIT License. See [LISENCE](LICENSE) for more information.
 
 
 
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - ctemelkuran@gmail.com
+Çığır Temelkuran - [@cigirtemelkuran](https://twitter.com/cigirtemelkuran) - ctemelkuran@gmail.com
 
 Project Link: [https://github.com/113-GittiGidiyor-Java-Spring-Bootcamp/gittigidiyor-graduation-project-ctemelkuran](https://github.com/113-GittiGidiyor-Java-Spring-Bootcamp/gittigidiyor-graduation-project-ctemelkuran)
 
 
 
-<!-- ACKNOWLEDGEMENTS -->
-## Acknowledgements
-
-* []()
-* []()
-* []()
-
-
-
-
-
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/ctemelkuran/repo.svg?style=for-the-badge
-[contributors-url]: https://github.com/113-GittiGidiyor-Java-Spring-Bootcamp/gittigidiyor-graduation-project-ctemelkuran/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/ctemelkuran/repo.svg?style=for-the-badge
-[forks-url]: https://github.com/113-GittiGidiyor-Java-Spring-Bootcamp/gittigidiyor-graduation-project-ctemelkuran/network/members
 [stars-shield]: https://img.shields.io/github/stars/ctemelkuran/repo.svg?style=for-the-badge
 [stars-url]: https://github.com/113-GittiGidiyor-Java-Spring-Bootcamp/gittigidiyor-graduation-project-ctemelkuran/stargazers
-[issues-shield]: https://img.shields.io/github/issues/ctemelkuran/repo.svg?style=for-the-badge
-[issues-url]: https://github.com/113-GittiGidiyor-Java-Spring-Bootcamp/gittigidiyor-graduation-project-ctemelkuran/issues
 [license-shield]: https://img.shields.io/github/license/ctemelkuran/repo.svg?style=for-the-badge
-[license-url]: https://github.com/113-GittiGidiyor-Java-Spring-Bootcamp/gittigidiyor-graduation-project-ctemelkuran/blob/master/LICENSE.txt
+[license-url]: https://github.com/113-GittiGidiyor-Java-Spring-Bootcamp/gittigidiyor-graduation-project-ctemelkuran/blob/main/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/ctemelkuran
 
