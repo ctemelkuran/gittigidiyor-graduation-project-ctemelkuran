@@ -79,7 +79,7 @@ If the customer applies for loan, a result sms is sent to their phone number.
 
 <p align="center">
   <a>
-    <img src="images/screenshot.jpg" alt="Screenshot" width="180" >
+    <img src="images/screenshot.jpg" alt="Screenshot" width="200" >
   </a>
  </p>
 
