@@ -1,6 +1,6 @@
-# Save Customer
+# Apply For Loan
 
-Saves a new customer to the database.
+Customer can apply for a loan. If the customer doesn't exist it is created and the application can be processed. A Sms message is sent to customers phone number. Only phone numbers from Turkey are accepted. A customer can apply for loan multiple times. 
 
 **Request URL**
 
@@ -19,7 +19,7 @@ Saves a new customer to the database.
 
 **Curl**
 
-`curl -X POST "http://localhost:8080/api/customers" -H "accept: */*" -H "Content-Type: application/json" -d "{ \"fullName\": \"Quentin Tarantino\", \"idNumber\": 36071499368, \"phoneNumber\": \"05381234567\", \"salary\": 3000}"`
+`curl -X POST "http://localhost:8080/loan-application/apply" -H "accept: */*" -H "Content-Type: application/json" -d "{ \"fullName\": \"Quentin Tarantino\", \"idNumber\": 36071499368, \"phoneNumber\": \"05381234567\", \"salary\": 5000}"`
 
 ## Server Responses
 ### Success
@@ -30,14 +30,13 @@ Saves a new customer to the database.
 ```json
 {
   "id": 1,
-  "fullName": "Quentin Tarantino",
-  "idNumber": 36071499368,
-  "phoneNumber": "05381234567",
-  "salary": 5000
+  "customerIdNumber": 36071499368,
+  "resultMessage": "APPROVED",
+  "loanAmount": 10000
 }
 ```
 ### Errors
-**Code:** `400`
+**Code:** `400 BAD REQUEST`
 
 If given National ID number already exists.
 

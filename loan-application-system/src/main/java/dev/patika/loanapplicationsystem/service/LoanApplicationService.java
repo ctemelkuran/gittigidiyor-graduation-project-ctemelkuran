@@ -1,12 +1,12 @@
 package dev.patika.loanapplicationsystem.service;
 
-import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import dev.patika.loanapplicationsystem.dto.CustomerDTO;
 import dev.patika.loanapplicationsystem.entity.Customer;
 import dev.patika.loanapplicationsystem.entity.LoanApplicationLogger;
 import dev.patika.loanapplicationsystem.entity.LoanApplicationResult;
 import dev.patika.loanapplicationsystem.entity.SmsRequest;
 import dev.patika.loanapplicationsystem.entity.enums.LoanResultMessage;
+import dev.patika.loanapplicationsystem.exceptions.LoanApplicationNotFoundException;
 import dev.patika.loanapplicationsystem.mapper.CustomerMapper;
 import dev.patika.loanapplicationsystem.repository.CustomerRepository;
 import dev.patika.loanapplicationsystem.repository.LoanApplicationLoggerRepository;
@@ -26,6 +26,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
 
+import static dev.patika.loanapplicationsystem.util.ErrorMessageConstants.LOAN_APPLICATION_NOT_FOUND;
 import static dev.patika.loanapplicationsystem.util.LoanApplicationCalculator.calculateLoanAmount;
 import static dev.patika.loanapplicationsystem.util.LoanApplicationCalculator.decideLoanResultMessage;
 
@@ -65,8 +66,8 @@ public class LoanApplicationService {
         }
         this.saveLoanApplicationToDatabase(loanApplicationResult);
 
-        // sends Sms message to the customer
-        //TODO this.sendSms(createSmsRequest(loanApplicationResult, customerDTO.getPhoneNumber()));
+        // TODO sends Sms message to the customer, but commented out due to limited sms sending
+        //this.sendSms(createSmsRequest(loanApplicationResult, customerDTO.getPhoneNumber()));
 
         return loanApplicationResult;
 
@@ -86,8 +87,11 @@ public class LoanApplicationService {
 
     public Set<LoanApplicationResult> getApplicationResult(long idNumber){
 
-        //LoanApplicationResult foundResult =
-                //.orElseThrow(() -> new LoanApplicationNotFoundException(String.format(LOAN_APPLICATION_NOT_FOUND, idNumber)));
+        CustomerValidator.validateNationalId(idNumber);
+
+        if (!resultRepository.existsByCustomerIdNumber(idNumber))
+            throw new LoanApplicationNotFoundException(String.format(LOAN_APPLICATION_NOT_FOUND, idNumber));
+
         return resultRepository.findByCustomerIdNumber(idNumber);
     }
 
@@ -104,14 +108,14 @@ public class LoanApplicationService {
 
     }
 
-    public Page<List<LoanApplicationLogger>> getAllTransactionsByDate(String transactionDate, Integer pageNumber, Integer pageSize, Pageable pageable) {
+    public Page<List<LoanApplicationLogger>> getAllApplicationsByDate(String applicationDate, Integer pageNumber, Integer pageSize, Pageable pageable) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
-        CustomerValidator.validateDate(transactionDate, formatter);
-        LocalDate transactionDateResult = LocalDate.parse(transactionDate, formatter);
+        CustomerValidator.validateDate(applicationDate, formatter);
+        LocalDate applicationDateResult = LocalDate.parse(applicationDate, formatter);
         if(pageNumber != null && pageSize != null){
             pageable = PageRequest.of(pageNumber, pageSize);
         }
-        return this.loggerRepository.findAllTransactionByTransactionDate(transactionDateResult, pageable);
+        return this.loggerRepository.findAllApplicationsByDate(applicationDateResult, pageable);
     }
 
     public void sendSms(SmsRequest smsRequest){

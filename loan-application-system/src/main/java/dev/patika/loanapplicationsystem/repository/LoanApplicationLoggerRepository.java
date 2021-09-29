@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface LoanApplicationLoggerRepository extends PagingAndSortingRepository<LoanApplicationLogger, Long> {
-    @Query("SELECT w FROM LoanApplicationLogger w WHERE w.loanApplicationDate= ?1")
-    Page<List<LoanApplicationLogger>> findAllTransactionByTransactionDate(LocalDate transactionDate, Pageable pageable);
+    @Query("SELECT a FROM LoanApplicationLogger a WHERE a.loanApplicationDate= ?1")
+    Page<List<LoanApplicationLogger>> findAllApplicationsByDate(LocalDate applicationDate, Pageable pageable);
 
 }

@@ -1,7 +1,6 @@
 package dev.patika.loanapplicationsystem.controller;
 
 import dev.patika.loanapplicationsystem.dto.CustomerDTO;
-import dev.patika.loanapplicationsystem.entity.CreditScore;
 import dev.patika.loanapplicationsystem.entity.LoanApplicationResult;
 import dev.patika.loanapplicationsystem.service.LoanApplicationService;
 import org.junit.jupiter.api.Test;
@@ -9,10 +8,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -51,7 +48,7 @@ class LoanApplicationControllerTest {
         Set<LoanApplicationResult> expected = new HashSet<>();
         when(mockLoanService.getApplicationResult(anyLong())).thenReturn(expected);
 
-        ResponseEntity<Set<LoanApplicationResult>> actual = loanApplicationController.loanApplicationResult(anyLong());
+        ResponseEntity<Set<LoanApplicationResult>> actual = loanApplicationController.getLoanApplicationResult(anyLong());
 
         assertAll(
                 () -> assertEquals(HttpStatus.OK, actual.getStatusCode()),

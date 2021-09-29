@@ -19,11 +19,12 @@ public class CustomerValidator {
      */
     public static void validateNationalId(long idNumber) {
 
+        int length = String.valueOf(idNumber).length();
         int sumOfNumber = 0;
         for (int i = 0; i < 10; i++) {
             sumOfNumber += valueAtIndexOfLong(idNumber, i);
         }
-        if (valueAtIndexOfLong(idNumber, 10) != sumOfNumber % 10) {
+        if (valueAtIndexOfLong(idNumber, 10) != sumOfNumber % 10 || length !=11) {
             throw new InvalidIdNumberException(INVALID_ID_NUMBER);
         }
     }

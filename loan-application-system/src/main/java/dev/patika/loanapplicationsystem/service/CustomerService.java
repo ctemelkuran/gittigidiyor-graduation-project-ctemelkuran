@@ -103,9 +103,10 @@ public class CustomerService {
      */
     @Transactional
     public Optional<CustomerDTO> updateCustomer(CustomerDTO customerDTO, long id) {
-        customerRepository.findById(id)
-                .orElseThrow(()-> new CustomerNotFoundException("Customer not found with id: "+ id));
 
+        if (!customerRepository.existsById(id)){
+            throw new CustomerNotFoundException("Customer not found with id: "+ id);
+        }
 
         // Validate Customer input such as National Id Number
         this.validateRequest(customerDTO);
@@ -113,7 +114,7 @@ public class CustomerService {
         boolean isExists = customerRepository.existsByIdNumber(customerDTO.getIdNumber());
 
         if (!isExists) {
-            throw new CustomerNotFoundException(CUSTOMER_NOT_FOUND + customerDTO.getIdNumber());
+            throw new CustomerNotFoundException(String.format(CUSTOMER_NOT_FOUND , customerDTO.getIdNumber()));
         }
 
         Customer customer = customerMapper.mapFromCustomerDTOtoCustomer(customerDTO);
@@ -153,7 +154,7 @@ public class CustomerService {
     public String deleteById(long id) {
 
         Customer foundCustomer = customerRepository.findById(id)
-                .orElseThrow(() -> new CustomerNotFoundException(CUSTOMER_NOT_FOUND));
+                .orElseThrow(() -> new CustomerNotFoundException("Customer not found with id: "+ id));
 
         customerRepository.delete(foundCustomer);
         return "Customer deleted with id: " + id;

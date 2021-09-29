@@ -63,11 +63,11 @@ public class CustomerController {
     @GetMapping("/get-applications-by-date")
     public ResponseEntity<Page<List<LoanApplicationLogger>>> getAllApplicationsByDate(
             @ApiParam(value = "Loan application query", example = "24/09/2021", required = true)
-            @RequestParam String transactionDate,
+            @RequestParam String applicationDate,
             @RequestParam(required = false) Integer pageNumber,
             @RequestParam(required = false) Integer pageSize,
             @PageableDefault(page = 0, size = 10) Pageable pageable){
-        return new ResponseEntity<>(this.loanApplicationService.getAllTransactionsByDate(transactionDate, pageNumber, pageSize, pageable), HttpStatus.OK);
+        return new ResponseEntity<>(this.loanApplicationService.getAllApplicationsByDate(applicationDate, pageNumber, pageSize, pageable), HttpStatus.OK);
     }
 
 }

@@ -8,6 +8,6 @@ import java.util.Set;
 
 @Repository
 public interface LoanApplicationResultRepository extends JpaRepository<LoanApplicationResult, Long> {
-    LoanApplicationResult findFirstByCustomerIdNumber(long idNumber);
+    boolean existsByCustomerIdNumber(long idNumber);
     Set<LoanApplicationResult> findByCustomerIdNumber(long idNumber);
 }

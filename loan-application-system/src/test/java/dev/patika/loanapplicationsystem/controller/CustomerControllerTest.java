@@ -12,13 +12,10 @@ import org.mockito.Mockito;
 import static org.mockito.Mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -119,7 +116,7 @@ class CustomerControllerTest {
     @Test
     void getAllApplicationsByDate() {
         Page<List<LoanApplicationLogger>> excepted = Page.empty();
-        when(mockLoanAppService.getAllTransactionsByDate(
+        when(mockLoanAppService.getAllApplicationsByDate(
                 anyString(),anyInt(),anyInt(),any())).thenReturn(excepted);
 
         Page<List<LoanApplicationLogger>> actual
