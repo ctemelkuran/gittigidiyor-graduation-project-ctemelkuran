@@ -41,71 +41,63 @@ class CustomerServiceTest {
     }
 
     @Test
-    void saveCustomer() { // TODO Customer service tests "why mapper returns null"
+    void saveCustomerTest() {
         // given
-        CustomerDTO customerDTO = new CustomerDTO();
-        customerDTO.setIdNumber(52362256090L);
+        customerDTOTest.setIdNumber(52362256090L);
         when(mockCustomerRepository.existsByIdNumber(anyLong())).thenReturn(Boolean.FALSE);
         when(mockCustomerMapper.mapFromCustomerDTOtoCustomer(any())).thenReturn(customerTest);
         when(mockCustomerRepository.save(any())).thenReturn(customerTest);
+        when(mockCustomerMapper.mapFromCustomerToCustomerDTO(any())).thenReturn(customerDTOTest);
         // when
-        CustomerDTO actual = this.customerService.saveCustomer(customerDTO).get();
+        CustomerDTO actual = this.customerService.saveCustomer(customerDTOTest).get();
 
         // then
         assertAll(
                 () -> assertNotNull(actual),
-                () -> assertEquals(customerDTO, actual),
-                () -> assertEquals(customerDTO.getIdNumber(), actual.getIdNumber())
+                () -> assertEquals(customerDTOTest, actual),
+                () -> assertEquals(customerDTOTest.getIdNumber(), actual.getIdNumber())
         );
     }
 
     @Test
-    void getAllCustomers() {
+    void getAllCustomersTest() {
         List<Customer> expected = new ArrayList<>();
         when(mockCustomerRepository.findAll()).thenReturn(expected);
 
-        //Set<CustomerDTO> actual = customerService.getAllCustomers();
+        Set<CustomerDTO> actual = customerService.getAllCustomers();
 
-        //TODO assertTrue(!actual.isEmpty());
+        assertTrue(actual.isEmpty());
     }
 
     @Test
     void updateShouldThrowExceptionWhenIdNotExists() {
-        CustomerDTO dto = new CustomerDTO();
-        Customer customer = new Customer();
-        dto.setId(1L);
-
-        when(mockCustomerRepository.findById(dto.getId())).thenReturn(Optional.of(customer));
+        customerDTOTest.setId(1L);
 
         assertThrows(CustomerNotFoundException.class, () ->{
-            customerService.updateCustomer(dto, 2L);
+            customerService.updateCustomer(customerDTOTest, 2L);
         });
 
     }
 
-    @Test
+
+/*    @Test
     void updateTest() {
-        Customer customer = new Customer();
-        customer.setId(1L);
-        CustomerDTO customerDTO = new CustomerDTO();
+        //given
 
-        when(mockCustomerMapper.mapFromCustomerDTOtoCustomer(any())).thenReturn(customer);
-        when(mockCustomerRepository.save(any())).thenReturn(customer);
+        when(mockCustomerRepository.existsByIdNumber(anyLong())).thenReturn(Boolean.TRUE);
+        when(mockCustomerRepository.existsByIdNumber(anyLong())).thenReturn(Boolean.TRUE);
+        when(mockCustomerMapper.mapFromCustomerDTOtoCustomer(any())).thenReturn(customerTest);
 
-        CustomerDTO expected = mockCustomerMapper.mapFromCustomerToCustomerDTO(customer);
-        customerDTO.setId(1L);
-        CustomerDTO actual = customerService.updateCustomer(customerDTO, 1L).get();
+        when(mockCustomerRepository.save(customerTest)).thenReturn(customerTest);
+        when(mockCustomerMapper.mapFromCustomerToCustomerDTO(customerTest)).thenReturn(customerDTOTest);
+
+        CustomerDTO expected = mockCustomerMapper.mapFromCustomerToCustomerDTO(customerTest);
+        CustomerDTO actual = customerService.updateCustomer(customerDTOTest, anyLong()).get();
 
         assertEquals(expected, actual);
 
+    }*/
 
-    }
 
-    @Test
-    void findById() {
-    }
 
-    @Test
-    void deleteById() {
-    }
 }

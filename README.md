@@ -27,8 +27,7 @@
     <a href="https://github.com/113-GittiGidiyor-Java-Spring-Bootcamp/gittigidiyor-graduation-project-ctemelkuran">View Demo</a>
     ·
     <a href="https://github.com/113-GittiGidiyor-Java-Spring-Bootcamp/gittigidiyor-graduation-project-ctemelkuran/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/113-GittiGidiyor-Java-Spring-Bootcamp/gittigidiyor-graduation-project-ctemelkuran/issues">Request Feature</a>
+      
   </p>
 
 
@@ -135,6 +134,34 @@ API's visualised interface can be reach from http://localhost:8080/swagger-ui.ht
 * [Show Application Logs By Date](doc/customer/get-application-logs.md)
 * [Show Exception Logs By Date](docs/exception-logs/get-exception-logs-by-date.md)
 * [Show Exception Logs By Type](docs/exception-logs/get-exception-logs-by-type.md)
+
+
+### Access Databases
+
+**View H2 Database**
+
+The project runs on H2 in-memory database. To view and interact with the database
+http://localhost:8080/h2-console can be browsed. You can login with the default username 'sa' and blank password. 
+
+**View MongoDB** 
+
+Credit score service runs on Mongo DB containers. 
+To view and interact with the database http://localhost:8081 can be browsed after running up `docker-compose.yaml` on Docker engine.
+
+### Spring Boot Actuator
+
+With the help of [Spring Boot Actuator](https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html) the
+application can be managed and monitored by using HTTP endpoints. Health and metrics can be audited.
+After browsing http://localhost:8080/actuator the following end points can be helpful to monitor the service.
+
+`/health` Shows application health information.
+
+`/metrics` Shows metrics of the running application.
+
+`/env` Exposes properties from Spring’s `ConfigurableEnvironment`.
+
+
+
 
 
 ## Roadmap

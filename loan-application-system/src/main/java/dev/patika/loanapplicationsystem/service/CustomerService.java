@@ -24,12 +24,12 @@ import static dev.patika.loanapplicationsystem.util.ErrorMessageConstants.CUSTOM
 @RequiredArgsConstructor
 public class CustomerService {
     private final CustomerRepository customerRepository;
-    @Autowired
-    private CustomerMapper customerMapper;
+    private final CustomerMapper customerMapper;
     @Autowired
     RestTemplate restTemplate;
 
     static final String CREDIT_SCORE_ENDPOINT = "http://localhost:8090/api/credit-scores/";
+
 
     /**
      * Creates a new customer and saves to database
@@ -108,7 +108,7 @@ public class CustomerService {
             throw new CustomerNotFoundException("Customer not found with id: "+ id);
         }
 
-        // Validate Customer input such as National Id Number
+        // Validate Customer input such as National ID Number
         this.validateRequest(customerDTO);
 
         boolean isExists = customerRepository.existsByIdNumber(customerDTO.getIdNumber());
@@ -119,7 +119,6 @@ public class CustomerService {
 
         Customer customer = customerMapper.mapFromCustomerDTOtoCustomer(customerDTO);
         customer.setId(id);
-        // customer.setCustomerCreditScore(getCreditScore(customer.getIdNumber()));
         CustomerDTO updatedCustomerDTO =
                 customerMapper.mapFromCustomerToCustomerDTO(customerRepository.save(customer));
 
@@ -132,16 +131,12 @@ public class CustomerService {
      * @param customerDTO object is taken to validate ID Number of customer
      */
     private void validateRequest(CustomerDTO customerDTO) {
+        if (Optional.of(customerDTO).isEmpty()){
+            throw new NullPointerException("Customer cannot be empty.");
+        }
         CustomerValidator.validateNationalId(customerDTO.getIdNumber());
     }
 
-    @Transactional(readOnly = true)
-    public CustomerDTO findById(long id){
-        Customer customer = customerRepository.findById(id).orElseThrow(
-                () -> new CustomerNotFoundException(String.format(CUSTOMER_NOT_FOUND, id)));
-
-        return customerMapper.mapFromCustomerToCustomerDTO(customer);
-    }
 
 
     /**
