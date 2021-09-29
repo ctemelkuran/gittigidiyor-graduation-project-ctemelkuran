@@ -3,8 +3,9 @@
 
 
 [![MIT License][license-shield]][license-url]
-[![MIT License][license-shield]][license-url]
+[![Repo Size][size-shield]][size-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
+[![JDK][jdk-shield]][jdk-url]
 
 
 
@@ -85,7 +86,6 @@ If the customer applies for loan, a result sms is sent to their phone number.
 
 
 
-<!-- GETTING STARTED -->
 ## Getting Started
 
 To get a local copy up and running follow these simple steps.
@@ -137,7 +137,6 @@ API's visualised interface can be reach from http://localhost:8080/swagger-ui.ht
 * [Show Exception Logs By Type](docs/exception-logs/get-exception-logs-by-type.md)
 
 
-<!-- ROADMAP -->
 ## Roadmap
 
 A useful front-end could be developed for the project. 
@@ -145,7 +144,6 @@ Also, there must be many security vulnerability that can be reduced.
 
 
 
-<!-- LICENSE -->
 ## License
 
 Distributed under the MIT License. See [LISENCE](LICENSE) for more information.
@@ -161,12 +159,13 @@ Project Link: [https://github.com/113-GittiGidiyor-Java-Spring-Bootcamp/gittigid
 
 
 
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [stars-shield]: https://img.shields.io/github/stars/ctemelkuran/repo.svg?style=for-the-badge
 [stars-url]: https://github.com/113-GittiGidiyor-Java-Spring-Bootcamp/gittigidiyor-graduation-project-ctemelkuran/stargazers
 [license-shield]: https://img.shields.io/github/license/ctemelkuran/repo.svg?style=for-the-badge
 [license-url]: https://github.com/113-GittiGidiyor-Java-Spring-Bootcamp/gittigidiyor-graduation-project-ctemelkuran/blob/main/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/ctemelkuran
-
+[size-shield]: https://img.shields.io/github/repo-size/113-GittiGidiyor-Java-Spring-Bootcamp/gittigidiyor-graduation-project-ctemelkuran?style=for-the-badge
+[size-url]: https://img.shields.io/github/repo-size/113-GittiGidiyor-Java-Spring-Bootcamp/gittigidiyor-graduation-project-ctemelkuran?style=for-the-badge
+[jdk-url]: https://www.oracle.com/java/technologies/downloads/
+[jdk-shield]: https://img.shields.io/badge/JDK-%3E%3D8-red?style=for-the-badge&logo=appveyor
