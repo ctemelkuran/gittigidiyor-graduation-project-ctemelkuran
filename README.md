@@ -51,16 +51,13 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
-    <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgements">Acknowledgements</a></li>
   </ol>
 </details>
 
 
 
-<!-- ABOUT THE PROJECT -->
 ## About The Project
 
 
@@ -78,9 +75,11 @@ instructor [Koray Güney](https://github.com/korayguney).
 ### Sms Service
 
 If the customer applies for loan, a result sms is sent to their phone number.
+
+<br />
 <p align="center">
   <a>
-    <img src="images/screenshot.png" alt="Screenshot" width="80" >
+    <img src="images/screenshot.jpg" alt="Screenshot" width="80" >
   </a>
  </p>
 
