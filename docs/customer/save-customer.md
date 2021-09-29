@@ -21,8 +21,8 @@ Saves a new customer to the database.
 
 `curl -X POST "http://localhost:8080/api/customers" -H "accept: */*" -H "Content-Type: application/json" -d "{ \"fullName\": \"Quentin Tarantino\", \"idNumber\": 36071499368, \"phoneNumber\": \"05381234567\", \"salary\": 3000}"`
 
-## Responses
-###Success
+## Server Responses
+### Success
 
 **Code:** `201`
 
