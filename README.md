@@ -76,10 +76,10 @@ instructor [Koray Güney](https://github.com/korayguney).
 
 If the customer applies for loan, a result sms is sent to their phone number.
 
-<br />
+
 <p align="center">
   <a>
-    <img src="images/screenshot.jpg" alt="Screenshot" width="80" >
+    <img src="images/screenshot.jpg" alt="Screenshot" width="180" >
   </a>
  </p>
 
