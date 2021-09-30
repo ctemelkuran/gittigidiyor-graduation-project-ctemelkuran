@@ -46,6 +46,14 @@ public class LoanApplicationService {
     private final TwilioSmsSenderService twilioSmsSenderService;
 
 
+    /**
+     * Loan application is performed with the applyToLoan method.
+     * If Customer not exists it is created first, then the result is determined.
+     * Result of the loan application is sent to the given phoneNumber in customerDTO
+     *
+     * @param customerDTO is received from the customer and processed.
+     * @return LoanApplicationResult to the endpoint.
+     */
     @Transactional
     public LoanApplicationResult applyToLoan(CustomerDTO customerDTO) {
         // check if customer exists
@@ -53,15 +61,14 @@ public class LoanApplicationService {
 
         LoanApplicationResult loanApplicationResult;
         // if customer not exist with given Id Number save the customer
-        if (!isExists){
+        if (!isExists) {
             customerService.saveCustomer(customerDTO);
-            loanApplicationResult = resultRepository.save(loanApplicationResult(
+            loanApplicationResult = resultRepository.save(decideLoanApplicationResult(
                     customerRepository.findCustomerByIdNumber(customerDTO.getIdNumber())));
 
-        }
-        else{
+        } else {
 
-            loanApplicationResult = resultRepository.save(loanApplicationResult(
+            loanApplicationResult = resultRepository.save(decideLoanApplicationResult(
                     customerRepository.findCustomerByIdNumber(customerDTO.getIdNumber())));
         }
         this.saveLoanApplicationToDatabase(loanApplicationResult);
@@ -73,7 +80,13 @@ public class LoanApplicationService {
 
     }
 
-    public LoanApplicationResult loanApplicationResult(Customer customer) {
+    /**
+     * Result of the loan application is decided in this method.
+     *
+     * @param customer taken as input parameter
+     * @return decided result
+     */
+    public LoanApplicationResult decideLoanApplicationResult(Customer customer) {
         LoanApplicationResult result = new LoanApplicationResult();
 
         int creditScore = customer.getCustomerCreditScore();
@@ -85,7 +98,13 @@ public class LoanApplicationService {
         return result;
     }
 
-    public Set<LoanApplicationResult> getApplicationResult(long idNumber){
+    /**
+     * Results of the loan applications can be queried by this method.
+     *
+     * @param idNumber is required in the sense of business logic
+     * @return a certain Customer's {@link LoanApplicationResult}
+     */
+    public Set<LoanApplicationResult> getApplicationResult(long idNumber) {
 
         CustomerValidator.validateNationalId(idNumber);
 
@@ -95,8 +114,15 @@ public class LoanApplicationService {
         return resultRepository.findByCustomerIdNumber(idNumber);
     }
 
+    /**
+     * Results of the loan applications are logged into the database with
+     * saveLoanApplicationToDatabase method after each application.
+     *
+     * @param result of the application is needed for logging.
+     */
     private void saveLoanApplicationToDatabase(LoanApplicationResult result) {
         LoanApplicationLogger logger = new LoanApplicationLogger();
+
         logger.setCustomerIdNumber(result.getCustomerIdNumber());
         logger.setLoanAmount(result.getLoanAmount());
         logger.setLoanResultMessage(result.getResultMessage());
@@ -104,37 +130,61 @@ public class LoanApplicationService {
         logger.setClientUrl(clientRequestInfo.getClientUrl());
         logger.setClientIpAddress(clientRequestInfo.getClientIpAddress());
         logger.setSessionActivityId(clientRequestInfo.getSessionActivityId());
-        this.loggerRepository.save(logger);
 
+        this.loggerRepository.save(logger);
     }
 
-    public Page<List<LoanApplicationLogger>> getAllApplicationsByDate(String applicationDate, Integer pageNumber, Integer pageSize, Pageable pageable) {
+    /**
+     * Loan applications logs can be queried with the loan application date
+     *
+     * @param applicationDate query date
+     * @param pageNumber      number of the quiered page
+     * @param pageSize        required size of the page
+     * @param pageable        indicates that it is pageable
+     * @return page of {@link LoanApplicationLogger} list
+     */
+    public Page<List<LoanApplicationLogger>> getAllApplicationLogsByDate(String applicationDate, Integer pageNumber, Integer pageSize, Pageable pageable) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
         CustomerValidator.validateDate(applicationDate, formatter);
         LocalDate applicationDateResult = LocalDate.parse(applicationDate, formatter);
-        if(pageNumber != null && pageSize != null){
+
+        if (pageNumber != null && pageSize != null) {
             pageable = PageRequest.of(pageNumber, pageSize);
         }
+
         return this.loggerRepository.findAllApplicationsByDate(applicationDateResult, pageable);
     }
 
-    public void sendSms(SmsRequest smsRequest){
+    /**
+     * Send the sms by calling {@link TwilioSmsSenderService} "sendSms" method
+     *
+     * @param smsRequest included the phone number and the message.
+     */
+    public void sendSms(SmsRequest smsRequest) {
         twilioSmsSenderService.sendSms(smsRequest);
     }
 
-    public SmsRequest createSmsRequest(LoanApplicationResult loanApplicationResult, String phoneNumber){
+    /**
+     * SmsRequest object is created with this method according to result of the application.
+     * Depending on the APPROVED or DENIED {@link LoanApplicationResult}
+     * 2 different sms message could be created.
+     *
+     * @param loanApplicationResult contains customer info and the result
+     * @param phoneNumber           is used to create {@link SmsRequest}
+     * @return SmsRequest which is required to sens Sms.
+     */
+    public SmsRequest createSmsRequest(LoanApplicationResult loanApplicationResult, String phoneNumber) {
         StringBuilder message = new StringBuilder("Dear customer with National ID: "
-                + loanApplicationResult.getCustomerIdNumber()+ " your loan application has been "
-                + loanApplicationResult.getResultMessage().toString().toLowerCase()+". ");
+                + loanApplicationResult.getCustomerIdNumber() + " your loan application has been "
+                + loanApplicationResult.getResultMessage().toString().toLowerCase() + ". ");
 
-        if (loanApplicationResult.getResultMessage().equals(LoanResultMessage.APPROVED)){
+        if (loanApplicationResult.getResultMessage().equals(LoanResultMessage.APPROVED)) {
             message.append("Your credit limit is "
                     + loanApplicationResult.getLoanAmount()
                     + " TRY. ");
         }
-        message.append("Thank you for choosing our bank. Have great day!");
+        message.append("Thank you for choosing our bank. Have great day! ");
 
         return new SmsRequest(phoneNumber, message.toString());
-
     }
 }

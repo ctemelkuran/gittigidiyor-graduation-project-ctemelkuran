@@ -67,7 +67,7 @@ public class CustomerController {
             @RequestParam(required = false) Integer pageNumber,
             @RequestParam(required = false) Integer pageSize,
             @PageableDefault(page = 0, size = 10) Pageable pageable){
-        return new ResponseEntity<>(this.loanApplicationService.getAllApplicationsByDate(applicationDate, pageNumber, pageSize, pageable), HttpStatus.OK);
+        return new ResponseEntity<>(this.loanApplicationService.getAllApplicationLogsByDate(applicationDate, pageNumber, pageSize, pageable), HttpStatus.OK);
     }
 
 }

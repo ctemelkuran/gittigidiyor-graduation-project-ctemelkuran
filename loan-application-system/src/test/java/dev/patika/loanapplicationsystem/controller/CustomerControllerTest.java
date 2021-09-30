@@ -116,13 +116,13 @@ class CustomerControllerTest {
     void getAllApplicationsByDate() {
         // given
         Page<List<LoanApplicationLogger>> excepted = Page.empty();
-        when(mockLoanAppService.getAllApplicationsByDate(
-                anyString(),anyInt(),anyInt(),any())).thenReturn(excepted);
+        when(mockLoanAppService.getAllApplicationLogsByDate(
+                anyString(), anyInt(), anyInt(), any())).thenReturn(excepted);
 
         // when
         Page<List<LoanApplicationLogger>> actual
                 = customerController.getAllApplicationsByDate(
-                        anyString(),anyInt(),anyInt(),any()).getBody();
+                anyString(), anyInt(), anyInt(), any()).getBody();
 
         // then
         assertAll(
