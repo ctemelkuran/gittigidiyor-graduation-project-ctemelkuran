@@ -20,42 +20,51 @@ import static dev.patika.loanapplicationsystem.config.TwilioConfig.trialNumber;
 @RequiredArgsConstructor
 public class TwilioSmsSenderService implements SmsSenderService {
 
-    //private final TwilioConfig twilioConfig;
     PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
 
     private final static Logger LOGGER = LoggerFactory.getLogger(TwilioSmsSenderService.class);
 
+    /**
+     * Sends sms with Twilio and validates phone numbers
+     *
+     * @param smsRequest contains phone number and a message
+     */
     @Override
     public void sendSms(SmsRequest smsRequest) {
 
         // Parse phone number and convert to Google library PhoneNumber object
         try {
-            Phonenumber.PhoneNumber phoneNumberProto = phoneUtil.parse(smsRequest.getPhoneNumber(),"TR");
+            Phonenumber.PhoneNumber phoneNumberProto = phoneUtil.parse(smsRequest.getPhoneNumber(), "TR");
 
-        if (phoneUtil.isValidNumber(phoneNumberProto)){
+            if (phoneUtil.isValidNumber(phoneNumberProto)) {
 
-            smsRequest.setPhoneNumber(formatPhoneNumber(phoneNumberProto));
-            PhoneNumber to = new PhoneNumber(smsRequest.getPhoneNumber());
-            PhoneNumber from = new PhoneNumber(trialNumber);
-            String message = smsRequest.getMessage();
-            MessageCreator messageCreator = Message.creator(
-                    to,
-                    from,
-                    message
-            );
-            messageCreator.create();
-            LOGGER.info("Send sms {} ", smsRequest);
-        }
-        else {
-            throw new IllegalArgumentException(
-                    "Phone number ["+smsRequest.getPhoneNumber()+"] is not valid.");
-        }
+                smsRequest.setPhoneNumber(formatPhoneNumber(phoneNumberProto));
+                PhoneNumber to = new PhoneNumber(smsRequest.getPhoneNumber());
+                PhoneNumber from = new PhoneNumber(trialNumber);
+                String message = smsRequest.getMessage();
+                MessageCreator messageCreator = Message.creator(
+                        to,
+                        from,
+                        message
+                );
+                messageCreator.create();
+                LOGGER.info("Send sms {} ", smsRequest);
+            } else {
+                throw new IllegalArgumentException(
+                        "Phone number [" + smsRequest.getPhoneNumber() + "] is not valid.");
+            }
         } catch (NumberParseException e) {
             System.err.println("NumberParseException was thrown: " + e.toString());
         }
 
     }
 
+    /**
+     * Formats phone number with Google phone number library
+     *
+     * @param phoneNumber is turned into E164 format
+     * @return newly formatted phone number
+     */
     private String formatPhoneNumber(Phonenumber.PhoneNumber phoneNumber) {
         return phoneUtil.format(phoneNumber, PhoneNumberUtil.PhoneNumberFormat.E164);
     }
