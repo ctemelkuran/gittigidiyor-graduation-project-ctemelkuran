@@ -49,7 +49,6 @@ class CustomerControllerTest {
                 () -> assertNotNull(actual),
                 () -> assertEquals(expected.get(), actual)
         );
-
     }
 
     @Test
@@ -66,28 +65,28 @@ class CustomerControllerTest {
     }
 
     @Test
-    void getAllCustomers() {
+    void getAllCustomersTest() {
         // given
-        when(mockCustomerService.getAllCustomers()).thenReturn(anySet());
+        Set<CustomerDTO> dtoSet = new HashSet<>();
+        when(mockCustomerService.getAllCustomers()).thenReturn(dtoSet);
+
         // when
         ResponseEntity<Set<CustomerDTO>> expected = this.customerController.getAllCustomers();
 
+        //then
         assertEquals(HttpStatus.OK, expected.getStatusCode());
-
-
     }
 
     @Test
-    void updateCustomer() {
+    void updateCustomerTest() {
         // given
-
         CustomerDTO dto = new CustomerDTO();
         Optional<CustomerDTO> expected = Optional.of(dto);
         // Any object is given to saveCustomer method, for primitive types anyInt etc. is used.
         Mockito.when(mockCustomerService.updateCustomer(any(), anyLong())).thenReturn(expected);
 
         // when
-        CustomerDTO actual = this.customerController.updateCustomer(1L,dto).getBody();
+        CustomerDTO actual = this.customerController.updateCustomer(1L, dto).getBody();
 
         // then
         assertAll(
@@ -115,14 +114,17 @@ class CustomerControllerTest {
 
     @Test
     void getAllApplicationsByDate() {
+        // given
         Page<List<LoanApplicationLogger>> excepted = Page.empty();
         when(mockLoanAppService.getAllApplicationsByDate(
                 anyString(),anyInt(),anyInt(),any())).thenReturn(excepted);
 
+        // when
         Page<List<LoanApplicationLogger>> actual
                 = customerController.getAllApplicationsByDate(
                         anyString(),anyInt(),anyInt(),any()).getBody();
 
+        // then
         assertAll(
                 () -> assertEquals(excepted, actual),
                 () -> assertNotNull(actual)
