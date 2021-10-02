@@ -121,17 +121,17 @@ API's visualised interface can be reach from http://localhost:8080/swagger-ui.ht
 
 ### Documentations for End Points
 **Loan Application**
-* [Apply To Loan](doc/loan-application/apply-to-loan.md)
-* [Show Loan Application Result](doc/loan-application/get-loan-application-result.md)
+* [Apply To Loan](docs/loan-application/apply-to-loan.md)
+* [Show Loan Application Result](docs/loan-application/get-loan-application-result.md)
 
 **Operations on Customers**
-* [Show All Customer](doc/customer/get-all-customers.md)
-* [Save New Customer](doc/customer/save-customer.md)
-* [Update Customer](doc/customer/update-customer.md)
-* [Delete Customer](doc/customer/delete-customer.md)
+* [Show All Customer](docs/customer/get-all-customers.md)
+* [Save New Customer](docs/customer/save-customer.md)
+* [Update Customer](docs/customer/update-customer.md)
+* [Delete Customer](docs/customer/delete-customer.md)
 
 **Loan Application and Exception Logs**
-* [Show Application Logs By Date](doc/customer/get-application-logs.md)
+* [Show Application Logs By Date](docs/customer/get-application-logs.md)
 * [Show Exception Logs By Date](docs/exception-logs/get-exception-logs-by-date.md)
 * [Show Exception Logs By Type](docs/exception-logs/get-exception-logs-by-type.md)
 
@@ -189,7 +189,7 @@ Project Link: [https://github.com/113-GittiGidiyor-Java-Spring-Bootcamp/gittigid
 [stars-shield]: https://img.shields.io/github/stars/ctemelkuran/repo.svg?style=for-the-badge
 [stars-url]: https://github.com/113-GittiGidiyor-Java-Spring-Bootcamp/gittigidiyor-graduation-project-ctemelkuran/stargazers
 [license-shield]: https://img.shields.io/github/license/ctemelkuran/repo.svg?style=for-the-badge
-[license-url]: https://github.com/113-GittiGidiyor-Java-Spring-Bootcamp/gittigidiyor-graduation-project-ctemelkuran/blob/main/LICENSE.txt
+[license-url]: https://github.com/113-GittiGidiyor-Java-Spring-Bootcamp/gittigidiyor-graduation-project-ctemelkuran/blob/main/LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/ctemelkuran
 [size-shield]: https://img.shields.io/github/repo-size/113-GittiGidiyor-Java-Spring-Bootcamp/gittigidiyor-graduation-project-ctemelkuran?style=for-the-badge
