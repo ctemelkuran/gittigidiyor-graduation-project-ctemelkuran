@@ -1,15 +1,8 @@
-
-
-
-
-[![MIT License][license-shield]][license-url]
 [![Repo Size][size-shield]][size-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
 [![JDK][jdk-shield]][jdk-url]
 
 
-
-<!-- PROJECT LOGO -->
 <br />
 <p align="center">
   <a href="https://github.com/113-GittiGidiyor-Java-Spring-Bootcamp/gittigidiyor-graduation-project-ctemelkuran">
@@ -29,7 +22,6 @@
     <a href="https://github.com/113-GittiGidiyor-Java-Spring-Bootcamp/gittigidiyor-graduation-project-ctemelkuran/issues">Report Bug</a>
       
   </p>
-
 
 
 
