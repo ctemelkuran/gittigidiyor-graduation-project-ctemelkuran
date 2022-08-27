@@ -1,4 +1,3 @@
-[![Repo Size][size-shield]][size-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
 [![JDK][jdk-shield]][jdk-url]
 
